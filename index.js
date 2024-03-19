@@ -1,0 +1,51 @@
+import express from "express";
+import { config } from "dotenv";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import company from "./routes/company.js";
+import intern from "./routes/intern.js";
+
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Connected to mongoDB.");
+  } catch (error) {
+    throw error;
+  }
+};
+
+mongoose.connection.on("disconnected", () => {
+  console.log("mongoDB disconnected!");
+});
+
+const app = express();
+
+config({ path: "./config/config.env" });
+
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// dbConnection();
+
+//routes
+app.use("/v1/company", company);
+app.use("/v1/intern", intern);
+
+// app.use((err, req, res, next) => {
+//   const errorStatus = err.status || 500;
+//   const errorMessage = err.message || "Something went wrong!";
+//   return res.status(errorStatus).json({
+//     success: false,
+//     status: errorStatus,
+//     message: errorMessage,
+//     stack: err.stack,
+//   });
+// });
+app.listen(process.env.PORT, () => {
+  connect();
+  console.log(`App listening on port ${process.env.PORT}`);
+});
+
+// app.get("/health_check", (req, res) => {
+//   res.status(200).send({ ping: "pong" });
+// });
