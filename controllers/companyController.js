@@ -3,11 +3,11 @@ import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
   try {
-    const { name, email, passwordHash } = req.body;
+    const { name, email, password } = req.body;
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(passwordHash, salt);
+    const hash = bcrypt.hashSync(password, salt);
 
-    if (!name || !email || !passwordHash) {
+    if (!name || !email || !password) {
       return res.status(400).json({ error: "Please fill full form!" });
     }
     const isEmail = await Company.findOne({ email });
