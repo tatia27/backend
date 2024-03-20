@@ -20,7 +20,7 @@ export const register = async (req, res) => {
       secondName,
       lastName,
       email,
-      password: hash,
+      passwordHash: hash,
     });
 
     res.status(200).json(intern);

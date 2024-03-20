@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import company from "./routes/company.js";
 import intern from "./routes/intern.js";
+import authorization from "./routes/authorization.js";
 
 const connect = async () => {
   try {
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //routes
 app.use("/v1/company", company);
 app.use("/v1/intern", intern);
+app.use("/v1/authorization", authorization);
 
 app.listen(process.env.PORT, () => {
   connect();

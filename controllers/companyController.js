@@ -1,13 +1,13 @@
 import Company from "../models/companyModel.js";
 import bcrypt from "bcrypt";
 
-export const register = async (req, res, next) => {
+export const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, passwordHash } = req.body;
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
+    const hash = bcrypt.hashSync(passwordHash, salt);
 
-    if (!name || !email || !password) {
+    if (!name || !email || !passwordHash) {
       return res.status(400).json({ error: "Please fill full form!" });
     }
     const isEmail = await Company.findOne({ email });
@@ -17,12 +17,12 @@ export const register = async (req, res, next) => {
     const company = await Company.create({
       name,
       email,
-      password: hash,
+      passwordHash: hash,
     });
 
     res.status(200).json(company);
   } catch (err) {
-    return res.status(500).json({ error: "Server Error" });
+    return res.status(400).json({ error: "Server Error" });
   }
 };
 

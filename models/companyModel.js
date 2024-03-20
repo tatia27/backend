@@ -11,7 +11,7 @@ const companySchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  password: {
+  passwordHash: {
     type: String,
     required: true,
     minlength: 8,
