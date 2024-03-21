@@ -1,9 +1,14 @@
 import express from "express";
 const router = express.Router();
 
-import { login } from "../controllers/authorizationController.js";
+import {
+  login,
+  logout,
+  isAuthenticated,
+} from "../controllers/authorizationController.js";
 
-// /v1/authorization POST
-router.get("/", login);
+// /v1/authorization
+router.post("/login", login);
+router.get("/logout", isAuthenticated, logout);
 
 export default router;

@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //routes
 app.use("/v1/company", company);
 app.use("/v1/intern", intern);
-app.use("/v1/authorization", authorization);
+app.use("/v1/auth", authorization);
 
 app.listen(process.env.PORT, () => {
   connect();
