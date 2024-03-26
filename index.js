@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import company from "./routes/company.js";
 import intern from "./routes/intern.js";
 import authorization from "./routes/authorization.js";
+import cors from "cors";
 
 const connect = async () => {
   try {
@@ -22,7 +23,7 @@ mongoose.connection.on("disconnected", () => {
 const app = express();
 
 config({ path: "./config/config.env" });
-
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

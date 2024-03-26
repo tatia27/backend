@@ -4,11 +4,11 @@ const router = express.Router();
 import {
   login,
   logout,
-  isAuthenticated,
+  // isAuthenticated,
 } from "../controllers/authorizationController.js";
 
 // /v1/authorization
 router.post("/login", login);
-router.get("/logout", isAuthenticated, logout);
+// router.get("/logout", logout);
 
 export default router;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// firstName, secondName, lastName, email, password, description
+// firstName, secondName, lastName, email, password, conditions, role, description, favorites
 const internSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -24,7 +24,19 @@ const internSchema = new mongoose.Schema({
     required: true,
     minlength: 8,
   },
+  conditions: {
+    type: Boolean,
+    required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+    enum: ["Intern", "Company"],
+  },
   description: String,
+  favorites: {
+    type: [],
+  },
 });
 
 export default mongoose.model("interns", internSchema);

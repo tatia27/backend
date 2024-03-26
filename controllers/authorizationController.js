@@ -1,7 +1,6 @@
 import Intern from "../models/internModel.js";
 import Company from "../models/companyModel.js";
 import { generateToken } from "../jwtToken/jwtToken.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const isPasswordCorrect = async (user, password) => {
@@ -21,48 +20,43 @@ export const login = async (req, res) => {
   if (company) {
     const isCompanyPasswordCorrect = await isPasswordCorrect(company, password);
     if (!isCompanyPasswordCorrect) {
-      return res.status(400).json({ error: "Incorrect password" });
+      return res.status(401).json({ error: "Incorrect password" });
     }
 
-    generateToken(res, 201, company._id);
-
-    res.json({
-      _id: company._id,
-      name: company.name,
-      email: company.email,
-    });
+    generateToken(company, 201, res, company._id, "User Loged in!");
   } else if (intern) {
     const isInternPasswordCorrect = await isPasswordCorrect(intern, password);
     if (!isInternPasswordCorrect) {
-      return res.status(400).json({ error: "Incorrect password" });
+      return res.status(401).json({ error: "Incorrect password" });
     }
 
-    generateToken(res, intern._id);
-
-    res.json({
-      _id: intern._id,
-      firstName: intern.firstName,
-      senondName: intern.secondName,
-      lastName: intern.lastName,
-      email: intern.email,
-    });
+    generateToken(company, 201, res, intern._id, "User Loged in!");
+    // res.json({
+    //   _id: intern._id,
+    //   firstName: intern.firstName,
+    //   senondName: intern.secondName,
+    //   lastName: intern.lastName,
+    //   email: intern.email,
+    //   role: intern.role,
+    //   tokenUser: token,
+    // });
   } else {
     return res.status(404).json({ error: "User not found" });
   }
 };
 
-// export const logout = async (req, res) => {
-//   res
-//     .status(201)
-//     .cookie("token", "", {
-//       httpOnly: true,
-//       expires: new Date(Date.now()),
-//     })
-//     .json({
-//       success: true,
-//       message: "Logged Out Successfully.",
-//     });
-// };
+export const logout = async (res) => {
+  res
+    .status(201)
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      message: "Logged Out Successfully.",
+    });
+};
 
 // export const isAuthenticated = async (req, res, next) => {
 //   const { token } = req.cookies;

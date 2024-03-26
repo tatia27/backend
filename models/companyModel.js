@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// name, email, password, photo, description
+// name, email, password, conditions,role, photo, description
 const companySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,6 +15,15 @@ const companySchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 8,
+  },
+  conditions: {
+    type: Boolean,
+    required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+    enum: ["Intern", "Company"],
   },
   photo: String,
   description: String,
