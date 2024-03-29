@@ -9,6 +9,7 @@ import {
 
 // /v1/authorization
 router.post("/login", login);
-// router.get("/logout", logout);
+// router.get("/profile", isAuthenticated);
+router.get("/logout", logout);
 
 export default router;

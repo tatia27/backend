@@ -24,10 +24,6 @@ const internSchema = new mongoose.Schema({
     required: true,
     minlength: 8,
   },
-  conditions: {
-    type: Boolean,
-    required: true,
-  },
   role: {
     type: String,
     required: true,

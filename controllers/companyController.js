@@ -7,8 +7,13 @@ export const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    if (!name || !email || !password || !conditions) {
+    if (!name || !email || !password) {
       return res.status(400).json({ error: "Please fill full form!" });
+    }
+    if (conditions !== true) {
+      return res
+        .status(401)
+        .json({ error: "Accept the terms of the agreement" });
     }
     const isEmail = await Company.findOne({ email });
     if (isEmail) {
@@ -18,7 +23,6 @@ export const register = async (req, res) => {
       name,
       email,
       passwordHash: hash,
-      conditions,
       role: "Company",
     });
 

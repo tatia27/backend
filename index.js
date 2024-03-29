@@ -1,29 +1,22 @@
 import express from "express";
 import { config } from "dotenv";
 import bodyParser from "body-parser";
-import mongoose from "mongoose";
 import company from "./routes/company.js";
 import intern from "./routes/intern.js";
+import internship from "./routes/internship.js";
 import authorization from "./routes/authorization.js";
+import { connect } from "./database/database.js";
 import cors from "cors";
-
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("Connected to mongoDB.");
-  } catch (error) {
-    throw error;
-  }
-};
-
-mongoose.connection.on("disconnected", () => {
-  console.log("mongoDB disconnected!");
-});
 
 const app = express();
 
 config({ path: "./config/config.env" });
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -31,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/v1/company", company);
 app.use("/v1/intern", intern);
 app.use("/v1/auth", authorization);
+app.use("/v1/internship", internship);
 
 app.listen(process.env.PORT, () => {
   connect();

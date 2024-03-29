@@ -8,15 +8,13 @@ export const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    if (
-      !firstName ||
-      !secondName ||
-      !lastName ||
-      !email ||
-      !password ||
-      !conditions
-    ) {
+    if (!firstName || !secondName || !lastName || !email || !password) {
       return res.status(400).json({ error: "Please fill full form!" });
+    }
+    if (conditions !== true) {
+      return res
+        .status(401)
+        .json({ error: "Accept the terms of the agreement" });
     }
     const isEmail = await Intern.findOne({ email });
     if (isEmail) {
@@ -29,7 +27,6 @@ export const register = async (req, res) => {
       lastName,
       email,
       passwordHash: hash,
-      conditions,
       role: "Intern",
     });
 
