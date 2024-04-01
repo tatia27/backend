@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
 
-// firstName, secondName, lastName, email, password, conditions, role, description, favorites
+// firstName, middleName, lastName, email, password,  role, description, favorites
 const internSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
   },
-  secondName: {
+  middleName: {
     type: String,
-    required: true,
   },
   lastName: {
     type: String,

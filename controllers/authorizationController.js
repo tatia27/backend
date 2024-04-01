@@ -48,15 +48,3 @@ export const logout = async (req, res) => {
       message: "Logged Out Successfully.",
     });
 };
-
-// export const isAuthenticated = async (req, res, next) => {
-//   const { token } = req.cookies;
-//   if (!token) {
-//     return res.status(401).json({ message: "User Not Authorized" });
-//   }
-//   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-//   // req.user = await User.findById(decoded.id);
-
-//   next();
-// };

@@ -1,11 +1,18 @@
 import Internship from "../models/internshipModel.js";
 
-export const createCompany = async (req, res, next) => {
-  const newComapny = new Internship(req.body);
+export const createIntership = async (req, res, next) => {
+  const newInternship = new Internship(req.body);
+
+  // const { role } = req.user;
+  // if (role === "Intern") {
+  //   return res
+  //     .status(403)
+  //     .json({ error: "Intern not allowed to access this resource" });
+  // }
 
   try {
-    const savedCompany = await newComapny.save();
-    res.status(200).json(savedCompany);
+    const savedIntership = await newInternship.save();
+    res.status(200).json(savedIntership);
   } catch (err) {
     next(err);
   }

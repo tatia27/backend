@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/v1/company", company);
 app.use("/v1/intern", intern);
 app.use("/v1/auth", authorization);
-app.use("/v1/internship", internship);
+app.use("/v1/internships", internship);
 
 app.listen(process.env.PORT, () => {
   connect();
