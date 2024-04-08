@@ -26,11 +26,6 @@ const internshipSchema = new mongoose.Schema({
       "Other",
     ],
   },
-  typeOfInternship: {
-    type: String,
-    required: true,
-    enum: ["Paid", "Unpaid"],
-  },
   schedule: {
     type: String,
     required: true,
@@ -47,6 +42,7 @@ const internshipSchema = new mongoose.Schema({
   },
   salary: {
     type: Number,
+    default: null,
     required: true,
   },
   skills: {
@@ -56,6 +52,9 @@ const internshipSchema = new mongoose.Schema({
   conditions: {
     type: String,
     required: true,
+  },
+  isActive: {
+    type: Boolean,
   },
 });
 

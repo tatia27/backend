@@ -54,13 +54,42 @@ export const getInterns = async (req, res, next) => {
   }
 };
 
-export const updateIntern = async (req, res, next) => {
+export const updateInternProfile = async (req, res, next) => {
   const { firstName, secondName, lastName, description } = req.body;
   const updateFields = {};
   if (firstName) updateFields.firstName = firstName;
   if (secondName) updateFields.secondName = secondName;
   if (lastName) updateFields.lastName = lastName;
   if (description) updateFields.description = description;
+  try {
+    const updateIntern = await Intern.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateFields },
+      { new: true }
+    );
+    res.status(200).json(updateIntern);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const createResume = async (req, res, next) => {
+  const {
+    age,
+    location,
+    levelOfEducation,
+    educationalInstitution,
+    hardSkills,
+    softSkills,
+  } = req.body;
+  const updateFields = {};
+  if (age) updateFields.age = age;
+  if (location) updateFields.location = location;
+  if (levelOfEducation) updateFields.levelOfEducation = levelOfEducation;
+  if (educationalInstitution)
+    updateFields.educationalInstitution = educationalInstitution;
+  if (hardSkills) updateFields.hardSkills = hardSkills;
+  if (softSkills) updateFields.softSkills = softSkills;
   try {
     const updateIntern = await Intern.findByIdAndUpdate(
       req.params.id,

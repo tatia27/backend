@@ -7,7 +7,7 @@ import {
   getInternships,
 } from "../controllers/internshipController.js";
 
-router.get("/", getInternships);
+router.get("", getInternships);
 router.post("/", createIntership);
 router.get("/:id", getInternship);
 

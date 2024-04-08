@@ -32,6 +32,17 @@ const internSchema = new mongoose.Schema({
   favorites: {
     type: [],
   },
+  cv: {
+    age: {
+      type: Number,
+      default: null,
+    },
+    location: String,
+    levelOfEducation: String,
+    educationalInstitution: String,
+    hardSkills: String,
+    softSkills: String,
+  },
 });
 
 export default mongoose.model("interns", internSchema);

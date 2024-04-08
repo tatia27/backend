@@ -5,7 +5,8 @@ import {
   register,
   getIntern,
   getInterns,
-  updateIntern,
+  updateInternProfile,
+  createResume,
 } from "../controllers/internController.js";
 
 // /v1/intern GET
@@ -17,7 +18,9 @@ router.post("/", register);
 // v1/intern/{intern_id} GET
 router.get("/:id", getIntern);
 
-// /v1/intern/{company_id} PUT
-router.patch("/:id", updateIntern);
+// /v1/intern/{intern_id} PUT
+router.patch("/:id", updateInternProfile);
+
+router.patch("/:id/resume", createResume);
 
 export default router;
