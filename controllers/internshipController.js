@@ -1,7 +1,7 @@
 import Internship from "../models/internshipModel.js";
+// import internships from "../config/internship.json" assert { type: "json" };
 
 export const createIntership = async (req, res) => {
-  // const newInternship = new Internship(req.body);
   try {
     const {
       title,
@@ -52,34 +52,36 @@ export const getInternship = async (req, res, next) => {
 
 export const getInternships = async (req, res, next) => {
   try {
-    const { page, focusOfInternship, schedule, typeOfEmployment, salary } =
+    let { page, focusOfInternship, schedule, typeOfEmployment, salary } =
       req.query;
     const ITEM_PAGE = 4;
     const skip = (parseInt(page) - 1) * ITEM_PAGE;
 
     let filter = {};
     if (focusOfInternship) {
-      filter.focusOfInternship = focusOfInternship;
+      focusOfInternship = focusOfInternship.split(",");
+      filter.focusOfInternship = { $in: focusOfInternship };
     }
     if (schedule) {
-      filter.schedule = schedule;
+      schedule = schedule.split(",");
+      filter.schedule = { $in: schedule };
     }
     if (typeOfEmployment) {
-      filter.typeOfEmployment = typeOfEmployment;
+      typeOfEmployment = typeOfEmployment.split(",");
+      filter.typeOfEmployment = { $in: typeOfEmployment };
     }
     if (salary !== undefined) {
       filter.salary = { $ne: null };
     }
 
-    console.log(filter);
-
     const internships = await Internship.find(filter)
       .skip(skip)
       .limit(ITEM_PAGE);
 
-    const total = await Internship.countDocuments();
+    const total = await Internship.countDocuments(filter);
+    const numberOfPages = Math.ceil(total / ITEM_PAGE);
 
-    const response = { internships, total };
+    const response = { internships, total, numberOfPages };
     res.status(200).json(response);
   } catch (err) {
     next(err);
