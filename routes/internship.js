@@ -5,9 +5,11 @@ import {
   createIntership,
   getInternship,
   getInternships,
+  getFilteredInternships,
 } from "../controllers/internshipController.js";
 
-router.get("", getInternships);
+router.get("", getFilteredInternships);
+router.get("/popular", getInternships);
 router.post("/", createIntership);
 router.get("/:id", getInternship);
 

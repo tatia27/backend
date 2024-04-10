@@ -43,7 +43,6 @@ const internshipSchema = new mongoose.Schema({
   salary: {
     type: Number,
     default: null,
-    required: true,
   },
   skills: {
     type: String,

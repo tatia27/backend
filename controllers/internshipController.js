@@ -1,5 +1,5 @@
 import Internship from "../models/internshipModel.js";
-// import internships from "../config/internship.json" assert { type: "json" };
+import { internships } from "../internships.js";
 
 export const createIntership = async (req, res) => {
   try {
@@ -50,7 +50,7 @@ export const getInternship = async (req, res, next) => {
   }
 };
 
-export const getInternships = async (req, res, next) => {
+export const getFilteredInternships = async (req, res, next) => {
   try {
     let { page, focusOfInternship, schedule, typeOfEmployment, salary } =
       req.query;
@@ -70,8 +70,15 @@ export const getInternships = async (req, res, next) => {
       typeOfEmployment = typeOfEmployment.split(",");
       filter.typeOfEmployment = { $in: typeOfEmployment };
     }
-    if (salary !== undefined) {
-      filter.salary = { $ne: null };
+    if (salary) {
+      salary = salary.split(",");
+      if (salary.includes("paid")) {
+        filter.salary = { $ne: null };
+      } else if (salary.includes("unpaid")) {
+        filter.salary = { $eq: null };
+      } else {
+        filter.salary = { $in: salary };
+      }
     }
 
     const internships = await Internship.find(filter)
@@ -87,3 +94,29 @@ export const getInternships = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getInternships = async (req, res) => {
+  try {
+    const limit = 6;
+    const internship = await Internship.find({
+      salary: { $ne: null },
+      typeOfEmployment: "Partial",
+    }).limit(limit);
+    res.status(200).json(internship);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// const insertInternships = async () => {
+//   try {
+//     const internship = await Internship.insertMany(internships);
+//     return Promise.resolve(internship);
+//   } catch (err) {
+//     return Promise.reject(err);
+//   }
+// };
+
+// insertInternships()
+//   .then((internships) => console.log(internships))
+//   .catch((err) => console.log(err));
