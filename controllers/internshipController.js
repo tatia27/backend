@@ -54,8 +54,8 @@ export const getFilteredInternships = async (req, res, next) => {
   try {
     let { page, focusOfInternship, schedule, typeOfEmployment, salary } =
       req.query;
-    const ITEM_PAGE = 4;
-    const skip = (parseInt(page) - 1) * ITEM_PAGE;
+    const limit = parseInt(req.query.limit) || 4;
+    const skip = (parseInt(page) - 1) * limit;
 
     let filter = {};
     if (focusOfInternship) {
@@ -81,12 +81,10 @@ export const getFilteredInternships = async (req, res, next) => {
       }
     }
 
-    const internships = await Internship.find(filter)
-      .skip(skip)
-      .limit(ITEM_PAGE);
+    const internships = await Internship.find(filter).skip(skip).limit(limit);
 
     const total = await Internship.countDocuments(filter);
-    const numberOfPages = Math.ceil(total / ITEM_PAGE);
+    const numberOfPages = Math.ceil(total / limit);
 
     const response = { internships, total, numberOfPages };
     res.status(200).json(response);
