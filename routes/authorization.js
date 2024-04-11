@@ -5,7 +5,7 @@ import {
   login,
   logout,
   // isAuthenticated,
-} from "../controllers/authorizationController.js";
+} from "../controllers/authController.js";
 
 // /v1/authorization
 router.post("/login", login);

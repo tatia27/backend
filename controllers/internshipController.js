@@ -83,10 +83,10 @@ export const getFilteredInternships = async (req, res, next) => {
 
     const internships = await Internship.find(filter).skip(skip).limit(limit);
 
-    const total = await Internship.countDocuments(filter);
-    const numberOfPages = Math.ceil(total / limit);
+    const totalInternships = await Internship.countDocuments(filter);
+    const numberOfPages = Math.ceil(totalInternships / limit);
 
-    const response = { internships, total, numberOfPages };
+    const response = { internships, numberOfPages };
     res.status(200).json(response);
   } catch (err) {
     next(err);
