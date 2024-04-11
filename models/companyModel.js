@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// name, email, password, conditions,role, photo, description
 const companySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -14,7 +13,6 @@ const companySchema = new mongoose.Schema({
   passwordHash: {
     type: String,
     required: true,
-    minlength: 8,
   },
   role: {
     type: String,

@@ -3,12 +3,12 @@ import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
   try {
-    const { firstName, secondName, lastName, email, password, conditions } =
+    const { firstName, middleName, lastName, email, password, conditions } =
       req.body;
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    if (!firstName || !secondName || !lastName || !email || !password) {
+    if (!firstName || !middleName || !lastName || !email || !password) {
       return res.status(400).json({ error: "Please fill full form!" });
     }
     if (conditions !== true) {
@@ -23,7 +23,7 @@ export const register = async (req, res) => {
 
     const intern = await Intern.create({
       firstName,
-      secondName,
+      middleName,
       lastName,
       email,
       passwordHash: hash,
@@ -74,23 +74,26 @@ export const updateInternProfile = async (req, res, next) => {
 };
 
 export const createResume = async (req, res, next) => {
-  const {
-    age,
-    location,
-    levelOfEducation,
-    educationalInstitution,
-    hardSkills,
-    softSkills,
-  } = req.body;
-  const updateFields = {};
-  if (age) updateFields.age = age;
-  if (location) updateFields.location = location;
-  if (levelOfEducation) updateFields.levelOfEducation = levelOfEducation;
-  if (educationalInstitution)
-    updateFields.educationalInstitution = educationalInstitution;
-  if (hardSkills) updateFields.hardSkills = hardSkills;
-  if (softSkills) updateFields.softSkills = softSkills;
   try {
+    const {
+      age,
+      location,
+      levelOfEducation,
+      educationalInstitution,
+      hardSkills,
+      softSkills,
+    } = req.body;
+
+    const updateFields = {};
+
+    if (age) updateFields.age = age;
+    if (location) updateFields.location = location;
+    if (levelOfEducation) updateFields.levelOfEducation = levelOfEducation;
+    if (educationalInstitution)
+      updateFields.educationalInstitution = educationalInstitution;
+    if (hardSkills) updateFields.hardSkills = hardSkills;
+    if (softSkills) updateFields.softSkills = softSkills;
+
     const updateIntern = await Intern.findByIdAndUpdate(
       req.params.id,
       { $set: updateFields },

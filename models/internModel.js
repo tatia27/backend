@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// firstName, middleName, lastName, email, password,  role, description, favorites
 const internSchema = new mongoose.Schema({
   firstName: {
     type: String,
