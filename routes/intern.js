@@ -19,8 +19,8 @@ router.post("/", register);
 router.get("/:id", getIntern);
 
 // /v1/intern/{intern_id} PUT
-router.patch("/:id", updateInternProfile);
+// router.patch("/:id", updateInternProfile);
 
-router.patch("/:id/resume", createResume);
+router.put("/:id/resume", createResume);
 
 export default router;

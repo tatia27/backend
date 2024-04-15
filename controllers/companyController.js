@@ -52,8 +52,9 @@ export const getCompanies = async (req, res, next) => {
 
 export const updateCompany = async (req, res, next) => {
   const { name, description } = req.body;
+
   const updateFields = {};
-  if (name) updateFields.name = name;
+  if (name !== "") updateFields.name = name;
   if (description) updateFields.description = description;
   try {
     const updateCompany = await Company.findByIdAndUpdate(

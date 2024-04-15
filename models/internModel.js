@@ -36,11 +36,24 @@ const internSchema = new mongoose.Schema({
       type: Number,
       default: null,
     },
-    location: String,
-    levelOfEducation: String,
-    educationalInstitution: String,
-    hardSkills: String,
-    softSkills: String,
+    location: {
+      type: String,
+    },
+    levelOfEducation: {
+      type: String,
+    },
+    educationalInstitution: {
+      type: String,
+    },
+    specialization: {
+      type: String,
+    },
+    hardSkills: {
+      type: String,
+    },
+    softSkills: {
+      type: String,
+    },
   },
 });
 

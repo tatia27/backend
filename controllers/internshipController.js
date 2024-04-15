@@ -1,5 +1,5 @@
 import Internship from "../models/internshipModel.js";
-import { internships } from "../internships.js";
+import Company from "../models/companyModel.js";
 
 export const createIntership = async (req, res) => {
   try {
@@ -93,7 +93,7 @@ export const getFilteredInternships = async (req, res, next) => {
   }
 };
 
-export const getInternships = async (req, res) => {
+export const getInternships = async (req, res, next) => {
   try {
     const limit = 6;
     const internship = await Internship.find({
@@ -106,6 +106,20 @@ export const getInternships = async (req, res) => {
   }
 };
 
+export const getInternshipsForCompany = async (req, res, next) => {
+  try {
+    const company = await Company.findById(req.params.id);
+    const internshipsForComapny = await Internship.find({
+      company: company.name,
+      isActive: true,
+    });
+    res.status(200).json(internshipsForComapny);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Заполнение коллекции internships стажировками из файла internship.js
 // const insertInternships = async () => {
 //   try {
 //     const internship = await Internship.insertMany(internships);

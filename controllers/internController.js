@@ -1,4 +1,5 @@
 import Intern from "../models/internModel.js";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
@@ -63,7 +64,7 @@ export const updateInternProfile = async (req, res, next) => {
   if (description) updateFields.description = description;
   try {
     const updateIntern = await Intern.findByIdAndUpdate(
-      req.params.id,
+      mongoose.Types.ObjectId(req.params.id),
       { $set: updateFields },
       { new: true }
     );
@@ -80,25 +81,32 @@ export const createResume = async (req, res, next) => {
       location,
       levelOfEducation,
       educationalInstitution,
+      specialization,
       hardSkills,
       softSkills,
     } = req.body;
+    const { id } = req.params;
 
     const updateFields = {};
-
-    if (age) updateFields.age = age;
-    if (location) updateFields.location = location;
-    if (levelOfEducation) updateFields.levelOfEducation = levelOfEducation;
+    if (age !== undefined) updateFields["cv.age"] = age;
+    if (location) updateFields["cv.location"] = location;
+    if (levelOfEducation)
+      updateFields["cv.levelOfEducation"] = levelOfEducation;
     if (educationalInstitution)
-      updateFields.educationalInstitution = educationalInstitution;
-    if (hardSkills) updateFields.hardSkills = hardSkills;
-    if (softSkills) updateFields.softSkills = softSkills;
+      updateFields["cv.educationalInstitution"] = educationalInstitution;
+    if (location) updateFields["cv.specialization"] = specialization;
+    if (hardSkills) updateFields["cv.hardSkills"] = hardSkills;
+    if (softSkills) updateFields["cv.softSkills"] = softSkills;
 
     const updateIntern = await Intern.findByIdAndUpdate(
-      req.params.id,
+      id,
       { $set: updateFields },
-      { new: true }
+      {
+        new: true,
+        useFindAndModify: false,
+      }
     );
+
     res.status(200).json(updateIntern);
   } catch (err) {
     next(err);

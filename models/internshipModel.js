@@ -52,6 +52,9 @@ const internshipSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  participants: {
+    type: [],
+  },
   isActive: {
     type: Boolean,
   },
