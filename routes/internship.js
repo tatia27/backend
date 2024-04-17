@@ -11,7 +11,7 @@ import {
 
 router.get("", getFilteredInternships);
 router.get("/popular", getInternships);
-router.post("/", createIntership);
+router.post("/:id", createIntership);
 router.get("/:id", getInternship);
 router.get("/:id/active", getInternshipsForCompany);
 

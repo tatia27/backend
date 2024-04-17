@@ -1,4 +1,5 @@
 import Intern from "../models/internModel.js";
+import validateMongodbId from "../utils/validateMongoId.js";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
@@ -28,7 +29,7 @@ export const register = async (req, res) => {
       lastName,
       email,
       passwordHash: hash,
-      role: "Intern",
+      role: "intern",
     });
 
     res.status(200).json(intern);
@@ -39,7 +40,12 @@ export const register = async (req, res) => {
 
 export const getIntern = async (req, res, next) => {
   try {
+    const { id } = req.params;
+
+    validateMongodbId(id, res);
+
     const intern = await Intern.findById(req.params.id);
+
     res.status(200).json(intern);
   } catch (err) {
     next(err);
