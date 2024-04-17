@@ -1,5 +1,5 @@
 import Internship from "../models/internshipModel.js";
-import Company from "../models/companyModel.js";
+import mongoose from "mongoose";
 
 export const createIntership = async (req, res) => {
   try {
@@ -14,6 +14,8 @@ export const createIntership = async (req, res) => {
       skills,
       conditions,
     } = req.body;
+    const companyId = req.params.id;
+    const companyObjectId = new mongoose.Types.ObjectId(companyId);
 
     const newInternship = await Internship.create({
       title,
@@ -26,6 +28,7 @@ export const createIntership = async (req, res) => {
       skills,
       conditions,
       isActive: true,
+      companyId: companyObjectId,
     });
 
     // const { role } = req.user;
@@ -108,9 +111,8 @@ export const getInternships = async (req, res, next) => {
 
 export const getInternshipsForCompany = async (req, res, next) => {
   try {
-    const company = await Company.findById(req.params.id);
     const internshipsForComapny = await Internship.find({
-      company: company.name,
+      companyId: req.params.id,
       isActive: true,
     });
     res.status(200).json(internshipsForComapny);

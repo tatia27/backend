@@ -1,60 +1,65 @@
 import mongoose from "mongoose";
 
-const internSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  middleName: {
-    type: String,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  passwordHash: {
-    type: String,
-    required: true,
-    minlength: 8,
-  },
-  role: {
-    type: String,
-    required: true,
-    enum: ["Intern", "Company"],
-  },
-  description: String,
-  favorites: {
-    type: [],
-  },
-  cv: {
-    age: {
-      type: Number,
-      default: null,
+const internSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
     },
-    location: {
+    middleName: {
       type: String,
     },
-    levelOfEducation: {
+    lastName: {
       type: String,
+      required: true,
     },
-    educationalInstitution: {
+    email: {
       type: String,
+      unique: true,
+      required: true,
     },
-    specialization: {
+    passwordHash: {
       type: String,
+      required: true,
+      minlength: 8,
     },
-    hardSkills: {
+    role: {
       type: String,
+      required: true,
+      enum: ["intern", "company"],
     },
-    softSkills: {
-      type: String,
+    description: String,
+    favorites: {
+      type: [],
+    },
+    cv: {
+      age: {
+        type: Number,
+        default: null,
+      },
+      location: {
+        type: String,
+      },
+      levelOfEducation: {
+        type: String,
+      },
+      educationalInstitution: {
+        type: String,
+      },
+      specialization: {
+        type: String,
+      },
+      hardSkills: {
+        type: String,
+      },
+      softSkills: {
+        type: String,
+      },
     },
   },
-});
+  {
+    versionKey: false,
+  }
+);
 
 export default mongoose.model("interns", internSchema);

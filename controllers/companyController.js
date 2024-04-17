@@ -1,4 +1,5 @@
 import Company from "../models/companyModel.js";
+import validateMongodbId from "../utils/validateMongoId.js";
 import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
@@ -23,7 +24,7 @@ export const register = async (req, res) => {
       name,
       email,
       passwordHash: hash,
-      role: "Company",
+      role: "company",
     });
 
     res.status(200).json(company);
@@ -34,7 +35,14 @@ export const register = async (req, res) => {
 
 export const getCompany = async (req, res, next) => {
   try {
+    const { id } = req.params;
+
+    validateMongodbId(id, res);
+
     const company = await Company.findById(req.params.id);
+    if (!company) {
+      return res.status(404).json({ message: "Not found" });
+    }
     res.status(200).json(company);
   } catch (err) {
     next(err);
