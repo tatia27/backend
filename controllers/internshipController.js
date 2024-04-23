@@ -1,5 +1,6 @@
 import Internship from "../models/internshipModel.js";
 import mongoose from "mongoose";
+import { internships } from "../internships.js";
 
 export const createIntership = async (req, res) => {
   try {
@@ -60,7 +61,7 @@ export const getFilteredInternships = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 4;
     const skip = (parseInt(page) - 1) * limit;
 
-    let filter = {};
+    let filter = {isActive: true};
     if (focusOfInternship) {
       focusOfInternship = focusOfInternship.split(",");
       filter.focusOfInternship = { $in: focusOfInternship };
@@ -102,6 +103,7 @@ export const getInternships = async (req, res, next) => {
     const internship = await Internship.find({
       salary: { $ne: null },
       typeOfEmployment: "Partial",
+      isActive: true
     }).limit(limit);
     res.status(200).json(internship);
   } catch (err) {
@@ -120,6 +122,62 @@ export const getInternshipsForCompany = async (req, res, next) => {
     next(err);
   }
 };
+
+export const setInactiveInternship = async (req, res, next) => {
+  try {
+    const inactiveInternship = await Internship.findByIdAndUpdate(
+      req.params.id,
+      { isActive: false },
+      { new: true }
+    );
+    res.status(200).json(inactiveInternship);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+export const applyForInternship = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;  
+    const id = req.params.id;
+    const { userId } = req.body; 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const existingInternship = await Internship.findOne({ _id: id, participants: userObjectId });
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    if (existingInternship) {
+      return res.status(400).json({ message: "You have already applied for this internship." });
+    }
+
+    const internship = await Internship.findByIdAndUpdate(
+      id,
+      { $push: { participants: userObjectId } },
+      { new: true }
+    );
+
+    res.status(200).json(internship);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const participantsOfInternship = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const internshipObjectId = new mongoose.Types.ObjectId(id);
+    const internship = await Internship.findOne({ _id: internshipObjectId});
+
+    res.status(200).json(internship.participants);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 
 // Заполнение коллекции internships стажировками из файла internship.js
 // const insertInternships = async () => {

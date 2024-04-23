@@ -21,7 +21,6 @@ const internSchema = new mongoose.Schema(
     passwordHash: {
       type: String,
       required: true,
-      minlength: 8,
     },
     role: {
       type: String,
@@ -29,9 +28,11 @@ const internSchema = new mongoose.Schema(
       enum: ["intern", "company"],
     },
     description: String,
-    favorites: {
-      type: [],
-    },
+    favorites:  [
+      {
+        type: mongoose.Types.ObjectId,
+      }
+    ],
     cv: {
       age: {
         type: Number,

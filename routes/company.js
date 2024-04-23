@@ -5,6 +5,7 @@ import {
   getCompany,
   getCompanies,
   updateCompany,
+  getUsersForInternship
 } from "../controllers/companyController.js";
 
 const router = express.Router();
@@ -20,5 +21,7 @@ router.get("/:id", getCompany);
 
 // /v1/companies/id PUT
 router.patch("/:id", updateCompany);
+
+router.get("/interns", getUsersForInternship);
 
 export default router;

@@ -40,6 +40,12 @@ export const register = async (req, res) => {
 
 export const getIntern = async (req, res, next) => {
   try {
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
     const { id } = req.params;
 
     validateMongodbId(id, res);
@@ -118,3 +124,30 @@ export const createResume = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+export const addToFavorites = async (req, res, next) => {
+  try {
+    const internshipId = req.params.id;
+    const { userId } = req.body; 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+  
+    const existingFavorite = await Internship.findOne({ userId: userObjectId, internshipId });
+
+    if (existingFavorite) {
+      return res.status(400).json({ message: "This internship is already in your favorites." });
+    }
+
+   
+    const newFavorite = new FavoriteInternship({ userId: userObjectId, internshipId });
+    await newFavorite.save();
+
+    res.status(200).json({ message: "Internship added to favorites successfully." });
+  } catch (err) {
+    next(err);
+  }
+};
+
+

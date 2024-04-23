@@ -1,5 +1,7 @@
 import Company from "../models/companyModel.js";
+import Internship from "../models/internshipModel.js";
 import validateMongodbId from "../utils/validateMongoId.js";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
@@ -71,6 +73,37 @@ export const updateCompany = async (req, res, next) => {
       { new: true }
     );
     res.status(200).json(updateCompany);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
+// export const getUsersForInternship = async (req, res, next) => {
+//   try {
+//     const id = req.params.id;
+//     const { internshipId } = req.body;
+//     const usersApplaysToInternship = await Internship.findById(
+//       internshipId,
+//     );
+//     res.status(200).json(usersApplaysToInternship);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+
+export const getUsersForInternship = async (req, res, next) => {
+  try {
+
+    const { internshipId } = req.body;
+    let internshipObjectId = new mongoose.Types.ObjectId(internshipId);
+    const internship = await Internship.findById(internshipObjectId, { participants: 1 });
+    if (!internship) {
+      return res.status(404).json({ message: "Стажировка не найдена" });
+    }
+    res.status(200).json(internship.participants);
   } catch (err) {
     next(err);
   }
