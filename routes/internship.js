@@ -19,6 +19,6 @@ router.get("/:id", getInternship);
 router.get("/:id/active", getInternshipsForCompany);
 router.patch("/:id/inactive", setInactiveInternship);
 router.patch("/:id/apply", applyForInternship);
-router.get("/participants", participantsOfInternship);
+router.get("/:id/participants", participantsOfInternship);
 
 export default router;

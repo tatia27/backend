@@ -58,6 +58,21 @@ export const getIntern = async (req, res, next) => {
   }
 };
 
+
+export const getInternForCompany = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    validateMongodbId(id, res);
+
+    const intern = await Intern.findById(req.params.id);
+
+    res.status(200).json({"firstName":intern.firstName, "lastName":intern.lastName});
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getInterns = async (req, res, next) => {
   try {
     const interns = await Intern.find();
@@ -126,28 +141,81 @@ export const createResume = async (req, res, next) => {
 };
 
 
-
-export const addToFavorites = async (req, res, next) => {
-  try {
-    const internshipId = req.params.id;
-    const { userId } = req.body; 
-    const userObjectId = new mongoose.Types.ObjectId(userId);
+// export const addToFavorites = async (req, res, next) => {
+//   try {
+//     const internshipId = req.params.id;
+//     const { userId } = req.body; 
+//     const userObjectId = new mongoose.Types.ObjectId(userId);
 
   
-    const existingFavorite = await Internship.findOne({ userId: userObjectId, internshipId });
+//     const existingFavorite = await Internship.findOne({ userId: userObjectId, internshipId });
 
-    if (existingFavorite) {
-      return res.status(400).json({ message: "This internship is already in your favorites." });
-    }
+//     if (existingFavorite) {
+//       return res.status(400).json({ message: "This internship is already in your favorites." });
+//     }
 
    
-    const newFavorite = new FavoriteInternship({ userId: userObjectId, internshipId });
-    await newFavorite.save();
+//     const newFavorite = new FavoriteInternship({ userId: userObjectId, internshipId });
+//     await newFavorite.save();
 
-    res.status(200).json({ message: "Internship added to favorites successfully." });
+//     res.status(200).json({ message: "Internship added to favorites successfully." });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+
+export const addToFavoritesInternship = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;  
+    const idInternship = req.params.id;
+    const { id } = req.body; 
+    const internshipObjectId = new mongoose.Types.ObjectId(idInternship);
+
+    const existingInternship = await Intern.findOne({ _id: id, favorites: internshipObjectId });
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    if (existingInternship) {
+      return res.status(400).json({ message: "You have already applied for this internship." });
+    }
+
+ 
+    const updatedInternship = await Intern.findByIdAndUpdate(
+      id,
+      { $push: { favorites: internshipObjectId } }, 
+      { new: true }
+    );
+
+    res.status(200).json(updatedInternship);
   } catch (err) {
     next(err);
   }
 };
 
+
+
+
+export const getFavoritesInternship = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;  
+    const id = req.params.id;
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const user = await Intern.findById(id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ favoriteInternshipIds: user.favorites });
+  } catch (err) {
+    next(err);
+  }
+};
 

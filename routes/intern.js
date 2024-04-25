@@ -7,14 +7,18 @@ import {
   getInterns,
   updateInternProfile,
   createResume,
-  addToFavorites
+  addToFavoritesInternship,
+  getFavoritesInternship,
+  getInternForCompany
 } from "../controllers/internController.js";
 
 
 router.get("/", getInterns);
 router.post("/", register);
 router.get("/:id", getIntern);
+router.get("/:id/apply-to-internship", getInternForCompany);
+router.get("/:id/favorites", getFavoritesInternship);
 router.put("/:id/resume", createResume);
-router.post('/:id/add-to-favorites', addToFavorites);
+router.patch('/:id/add-to-favorites', addToFavoritesInternship);
 
 export default router;

@@ -38,6 +38,11 @@ export const register = async (req, res) => {
 export const getCompany = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
     validateMongodbId(id, res);
 
@@ -77,22 +82,6 @@ export const updateCompany = async (req, res, next) => {
     next(err);
   }
 };
-
-
-
-// export const getUsersForInternship = async (req, res, next) => {
-//   try {
-//     const id = req.params.id;
-//     const { internshipId } = req.body;
-//     const usersApplaysToInternship = await Internship.findById(
-//       internshipId,
-//     );
-//     res.status(200).json(usersApplaysToInternship);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
 
 export const getUsersForInternship = async (req, res, next) => {
   try {

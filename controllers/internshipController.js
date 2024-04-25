@@ -137,13 +137,15 @@ export const setInactiveInternship = async (req, res, next) => {
 };
 
 
+
 export const applyForInternship = async (req, res, next) => {
   try {
     const token = req.headers.authorization;  
-    const id = req.params.id;
-    const { userId } = req.body; 
-    const userObjectId = new mongoose.Types.ObjectId(userId);
-    const existingInternship = await Internship.findOne({ _id: id, participants: userObjectId });
+    const idInternship = req.params.id;
+    const { id } = req.body; 
+    const userObjectId = new mongoose.Types.ObjectId(id);
+
+    const existingInternship = await Internship.findOne({ _id: idInternship, participants: userObjectId });
 
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -153,13 +155,14 @@ export const applyForInternship = async (req, res, next) => {
       return res.status(400).json({ message: "You have already applied for this internship." });
     }
 
-    const internship = await Internship.findByIdAndUpdate(
-      id,
-      { $push: { participants: userObjectId } },
+ 
+    const updatedInternship = await Internship.findByIdAndUpdate(
+      idInternship,
+      { $push: { participants: userObjectId } }, 
       { new: true }
     );
 
-    res.status(200).json(internship);
+    res.status(200).json(updatedInternship);
   } catch (err) {
     next(err);
   }
@@ -167,7 +170,8 @@ export const applyForInternship = async (req, res, next) => {
 
 export const participantsOfInternship = async (req, res, next) => {
   try {
-    const { id } = req.body;
+    // const { id } = req.body;
+    const { id } = req.params;
     const internshipObjectId = new mongoose.Types.ObjectId(id);
     const internship = await Internship.findOne({ _id: internshipObjectId});
 
@@ -176,6 +180,7 @@ export const participantsOfInternship = async (req, res, next) => {
     next(err);
   }
 };
+
 
 
 
