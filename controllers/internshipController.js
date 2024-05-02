@@ -1,6 +1,5 @@
 import Internship from "../models/internshipModel.js";
 import mongoose from "mongoose";
-import { internships } from "../internships.js";
 
 export const createIntership = async (req, res) => {
   try {
@@ -15,7 +14,7 @@ export const createIntership = async (req, res) => {
       skills,
       conditions,
     } = req.body;
-    const companyId = req.params.id;
+    const companyId = req.params;
     const companyObjectId = new mongoose.Types.ObjectId(companyId);
 
     const newInternship = await Internship.create({
@@ -61,7 +60,7 @@ export const getFilteredInternships = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 4;
     const skip = (parseInt(page) - 1) * limit;
 
-    let filter = {isActive: true};
+    let filter = { isActive: true };
     if (focusOfInternship) {
       focusOfInternship = focusOfInternship.split(",");
       filter.focusOfInternship = { $in: focusOfInternship };
@@ -103,7 +102,7 @@ export const getInternships = async (req, res, next) => {
     const internship = await Internship.find({
       salary: { $ne: null },
       typeOfEmployment: "Partial",
-      isActive: true
+      isActive: true,
     }).limit(limit);
     res.status(200).json(internship);
   } catch (err) {
@@ -128,7 +127,7 @@ export const setInactiveInternship = async (req, res, next) => {
     const inactiveInternship = await Internship.findByIdAndUpdate(
       req.params.id,
       { isActive: false },
-      { new: true }
+      { new: true },
     );
     res.status(200).json(inactiveInternship);
   } catch (err) {
@@ -136,30 +135,32 @@ export const setInactiveInternship = async (req, res, next) => {
   }
 };
 
-
-
 export const applyForInternship = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;  
+    const token = req.headers.authorization;
     const idInternship = req.params.id;
-    const { id } = req.body; 
+    const { id } = req.body;
     const userObjectId = new mongoose.Types.ObjectId(id);
 
-    const existingInternship = await Internship.findOne({ _id: idInternship, participants: userObjectId });
+    const existingInternship = await Internship.findOne({
+      _id: idInternship,
+      participants: userObjectId,
+    });
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     if (existingInternship) {
-      return res.status(400).json({ message: "You have already applied for this internship." });
+      return res
+        .status(400)
+        .json({ message: "You have already applied for this internship." });
     }
 
- 
     const updatedInternship = await Internship.findByIdAndUpdate(
       idInternship,
-      { $push: { participants: userObjectId } }, 
-      { new: true }
+      { $push: { participants: userObjectId } },
+      { new: true },
     );
 
     res.status(200).json(updatedInternship);
@@ -173,16 +174,13 @@ export const participantsOfInternship = async (req, res, next) => {
     // const { id } = req.body;
     const { id } = req.params;
     const internshipObjectId = new mongoose.Types.ObjectId(id);
-    const internship = await Internship.findOne({ _id: internshipObjectId});
+    const internship = await Internship.findOne({ _id: internshipObjectId });
 
     res.status(200).json(internship.participants);
   } catch (err) {
     next(err);
   }
 };
-
-
-
 
 // Заполнение коллекции internships стажировками из файла internship.js
 // const insertInternships = async () => {

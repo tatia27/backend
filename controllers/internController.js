@@ -43,7 +43,7 @@ export const getIntern = async (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const { id } = req.params;
@@ -58,7 +58,6 @@ export const getIntern = async (req, res, next) => {
   }
 };
 
-
 export const getInternForCompany = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -67,7 +66,9 @@ export const getInternForCompany = async (req, res, next) => {
 
     const intern = await Intern.findById(req.params.id);
 
-    res.status(200).json({"firstName":intern.firstName, "lastName":intern.lastName});
+    res
+      .status(200)
+      .json({ firstName: intern.firstName, lastName: intern.lastName });
   } catch (err) {
     next(err);
   }
@@ -93,7 +94,7 @@ export const updateInternProfile = async (req, res, next) => {
     const updateIntern = await Intern.findByIdAndUpdate(
       mongoose.Types.ObjectId(req.params.id),
       { $set: updateFields },
-      { new: true }
+      { new: true },
     );
     res.status(200).json(updateIntern);
   } catch (err) {
@@ -113,6 +114,7 @@ export const createResume = async (req, res, next) => {
       softSkills,
     } = req.body;
     const { id } = req.params;
+    console.log(id);
 
     const updateFields = {};
     if (age !== undefined) updateFields["cv.age"] = age;
@@ -131,7 +133,7 @@ export const createResume = async (req, res, next) => {
       {
         new: true,
         useFindAndModify: false,
-      }
+      },
     );
 
     res.status(200).json(updateIntern);
@@ -140,21 +142,18 @@ export const createResume = async (req, res, next) => {
   }
 };
 
-
 // export const addToFavorites = async (req, res, next) => {
 //   try {
 //     const internshipId = req.params.id;
-//     const { userId } = req.body; 
+//     const { userId } = req.body;
 //     const userObjectId = new mongoose.Types.ObjectId(userId);
 
-  
 //     const existingFavorite = await Internship.findOne({ userId: userObjectId, internshipId });
 
 //     if (existingFavorite) {
 //       return res.status(400).json({ message: "This internship is already in your favorites." });
 //     }
 
-   
 //     const newFavorite = new FavoriteInternship({ userId: userObjectId, internshipId });
 //     await newFavorite.save();
 
@@ -164,29 +163,32 @@ export const createResume = async (req, res, next) => {
 //   }
 // };
 
-
 export const addToFavoritesInternship = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;  
+    const token = req.headers.authorization;
     const idInternship = req.params.id;
-    const { id } = req.body; 
+    const { id } = req.body;
     const internshipObjectId = new mongoose.Types.ObjectId(idInternship);
 
-    const existingInternship = await Intern.findOne({ _id: id, favorites: internshipObjectId });
+    const existingInternship = await Intern.findOne({
+      _id: id,
+      favorites: internshipObjectId,
+    });
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     if (existingInternship) {
-      return res.status(400).json({ message: "You have already applied for this internship." });
+      return res
+        .status(400)
+        .json({ message: "You have already applied for this internship." });
     }
 
- 
     const updatedInternship = await Intern.findByIdAndUpdate(
       id,
-      { $push: { favorites: internshipObjectId } }, 
-      { new: true }
+      { $push: { favorites: internshipObjectId } },
+      { new: true },
     );
 
     res.status(200).json(updatedInternship);
@@ -195,22 +197,19 @@ export const addToFavoritesInternship = async (req, res, next) => {
   }
 };
 
-
-
-
 export const getFavoritesInternship = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;  
+    const token = req.headers.authorization;
     const id = req.params.id;
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const user = await Intern.findById(id);
-    
+
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.status(200).json({ favoriteInternshipIds: user.favorites });
@@ -218,4 +217,3 @@ export const getFavoritesInternship = async (req, res, next) => {
     next(err);
   }
 };
-

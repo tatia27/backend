@@ -56,7 +56,7 @@ const internshipSchema = new mongoose.Schema(
     participants: [
       {
         type: mongoose.Types.ObjectId,
-      }
+      },
     ],
     isActive: {
       type: Boolean,
@@ -67,7 +67,7 @@ const internshipSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-  }
+  },
 );
 
 export default mongoose.model("internship", internshipSchema);

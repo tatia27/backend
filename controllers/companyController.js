@@ -41,7 +41,7 @@ export const getCompany = async (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     validateMongodbId(id, res);
@@ -75,7 +75,7 @@ export const updateCompany = async (req, res, next) => {
     const updateCompany = await Company.findByIdAndUpdate(
       req.params.id,
       { $set: updateFields },
-      { new: true }
+      { new: true },
     );
     res.status(200).json(updateCompany);
   } catch (err) {
@@ -85,10 +85,11 @@ export const updateCompany = async (req, res, next) => {
 
 export const getUsersForInternship = async (req, res, next) => {
   try {
-
     const { internshipId } = req.body;
     let internshipObjectId = new mongoose.Types.ObjectId(internshipId);
-    const internship = await Internship.findById(internshipObjectId, { participants: 1 });
+    const internship = await Internship.findById(internshipObjectId, {
+      participants: 1,
+    });
     if (!internship) {
       return res.status(404).json({ message: "Стажировка не найдена" });
     }

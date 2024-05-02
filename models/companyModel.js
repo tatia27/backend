@@ -25,7 +25,7 @@ const companySchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-  }
+  },
 );
 
 export default mongoose.model("companies", companySchema);

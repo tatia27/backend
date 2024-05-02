@@ -28,10 +28,10 @@ const internSchema = new mongoose.Schema(
       enum: ["intern", "company"],
     },
     description: String,
-    favorites:  [
+    favorites: [
       {
         type: mongoose.Types.ObjectId,
-      }
+      },
     ],
     cv: {
       age: {
@@ -60,7 +60,7 @@ const internSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
-  }
+  },
 );
 
 export default mongoose.model("interns", internSchema);

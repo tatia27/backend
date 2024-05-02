@@ -9,9 +9,8 @@ import {
   createResume,
   addToFavoritesInternship,
   getFavoritesInternship,
-  getInternForCompany
+  getInternForCompany,
 } from "../controllers/internController.js";
-
 
 router.get("/", getInterns);
 router.post("/", register);
@@ -19,6 +18,6 @@ router.get("/:id", getIntern);
 router.get("/:id/apply-to-internship", getInternForCompany);
 router.get("/:id/favorites", getFavoritesInternship);
 router.put("/:id/resume", createResume);
-router.patch('/:id/add-to-favorites', addToFavoritesInternship);
+router.patch("/:id/add-to-favorites", addToFavoritesInternship);
 
 export default router;

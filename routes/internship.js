@@ -9,7 +9,7 @@ import {
   getInternshipsForCompany,
   setInactiveInternship,
   applyForInternship,
-  participantsOfInternship
+  participantsOfInternship,
 } from "../controllers/internshipController.js";
 
 router.get("", getFilteredInternships);
