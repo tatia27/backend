@@ -7,6 +7,7 @@ import internship from "./routes/internship.js";
 import authorization from "./routes/authorization.js";
 import { connect } from "./database/database.js";
 import cors from "cors";
+import {checkCompanyAuth } from "./middlewares/checkAuth.js"
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
-app.use("/v1/company", company);
+app.use("/v1/company", checkCompanyAuth, company);
 app.use("/v1/intern", intern);
 app.use("/v1/auth", authorization);
 app.use("/v1/internships", internship);

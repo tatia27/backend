@@ -1,6 +1,7 @@
 import Intern from "../models/internModel.js";
 import validateMongodbId from "../utils/validateMongoId.js";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
@@ -41,12 +42,13 @@ export const register = async (req, res) => {
 export const getIntern = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-
+    const { id } = req.params;
+    // console.log(id)
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const { id } = req.params;
+   
 
     validateMongodbId(id, res);
 
@@ -114,7 +116,8 @@ export const createResume = async (req, res, next) => {
       softSkills,
     } = req.body;
     const { id } = req.params;
-    console.log(id);
+    // console.log(id);
+ 
 
     const updateFields = {};
     if (age !== undefined) updateFields["cv.age"] = age;
@@ -165,10 +168,13 @@ export const createResume = async (req, res, next) => {
 
 export const addToFavoritesInternship = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
+    const authHeader = req.headers.authorization;
     const idInternship = req.params.id;
     const { id } = req.body;
     const internshipObjectId = new mongoose.Types.ObjectId(idInternship);
+    console.log(authHeader);
+    const token = authHeader.split(" ")[1];
+    console.log(token)
 
     const existingInternship = await Intern.findOne({
       _id: id,
@@ -197,11 +203,43 @@ export const addToFavoritesInternship = async (req, res, next) => {
   }
 };
 
+
+export const removeFromFavoritesInternship = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const internshipId = req.params.id;
+    // console.log(internshipId)
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    // console.log(decoded)
+    const internshipObjectId = new mongoose.Types.ObjectId(internshipId);
+    const userObjectId = new mongoose.Types.ObjectId(decoded.userId);
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
+    const existingInternship = await Intern.findOneAndUpdate(
+      { _id: userObjectId, favorites: internshipObjectId },
+      { $pull: { favorites: internshipObjectId } },
+    );
+    console.log(existingInternship)
+   
+    if (!existingInternship) {
+      return res.status(400).json({ message: "Internship not found in favorites." });
+    }
+
+    res.status(200).json({ message: "Internship removed from favorites." });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getFavoritesInternship = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
+    const authHeaders = req.headers.authorization;
     const id = req.params.id;
-
+    const token = authHeaders.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -212,7 +250,7 @@ export const getFavoritesInternship = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ favoriteInternshipIds: user.favorites });
+    res.status(200).json( user.favorites );
   } catch (err) {
     next(err);
   }

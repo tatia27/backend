@@ -38,11 +38,7 @@ export const register = async (req, res) => {
 export const getCompany = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const token = req.headers.authorization;
 
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
 
     validateMongodbId(id, res);
 
@@ -56,14 +52,14 @@ export const getCompany = async (req, res, next) => {
   }
 };
 
-export const getCompanies = async (req, res, next) => {
-  try {
-    const companies = await Company.find();
-    res.status(200).json(companies);
-  } catch (err) {
-    next(err);
-  }
-};
+// export const getCompanies = async (req, res, next) => {
+//   try {
+//     const companies = await Company.find();
+//     res.status(200).json(companies);
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const updateCompany = async (req, res, next) => {
   const { name, description } = req.body;

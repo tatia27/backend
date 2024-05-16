@@ -4,15 +4,15 @@ const router = express.Router();
 import {
   login,
   logout,
-  isAuthenticated,
+  isAuth,
 } from "../controllers/authController.js";
+import { checkAuth } from "../middlewares/checkAuth.js";
 
-// /v1/authorization
+
 router.post("/login", login);
 
-// router.get("/profile", isAuthenticated);
 router.get("/logout", logout);
 
-router.get("/isAuth", isAuthenticated);
+router.get("/isAuth", checkAuth, isAuth);
 
 export default router;
