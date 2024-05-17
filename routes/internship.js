@@ -14,8 +14,8 @@ import {
 import {  checkCompanyAuth, checkInternAuth } from "../middlewares/checkAuth.js";
 
 // public
-router.get("/popular", getInternships);
 router.get("", getFilteredInternships);
+router.get("/popular", getInternships);
 router.get("/:id", getInternship);
 
 // intern only

@@ -19,6 +19,14 @@ export const ERRORS = {
         CODE: HTTP_CODES.NOT_FOUND,
         TITLE: "Company not found"
     },
+    INTERN_NOT_FOUND: {
+        CODE: HTTP_CODES.NOT_FOUND,
+        TITLE: "Intern not found"
+    },
+    INTERNSHIP_NOT_FOUND: {
+        CODE: HTTP_CODES.NOT_FOUND,
+        TITLE: "Internship not found"
+    },
     BAD_REQUEST: {
         CODE: HTTP_CODES.BAD_REQUEST,
         TITLE: "Invalid request"

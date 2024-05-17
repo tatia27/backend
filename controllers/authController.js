@@ -45,19 +45,6 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
-  res
-    .status(201)
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
-    .json({
-      success: true,
-      message: "Logged Out Successfully.",
-    });
-};
-
 export const isAuth = async (req, res) => {
   const decoded = req.sessionData; // jwt.verify(token, process.env.JWT_SECRET);
   if (decoded.role === "intern") {
@@ -79,4 +66,17 @@ export const isAuth = async (req, res) => {
   
   return  res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE});
  
+};
+
+export const logout = async (req, res) => {
+  res
+    .status(201)
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    })
+    .json({
+      success: true,
+      message: "Logged Out Successfully.",
+    });
 };

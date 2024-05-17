@@ -1,5 +1,6 @@
 import Internship from "../models/internshipModel.js";
 import mongoose from "mongoose";
+import { internships } from "../internships.js";
 
 
 export const createIntership = async (req, res) => {
@@ -15,7 +16,7 @@ export const createIntership = async (req, res) => {
       skills,
       conditions,
     } = req.body;
-    const companyId = req.params;
+    const companyId = req.params.id;
     const companyObjectId = new mongoose.Types.ObjectId(companyId);
 
     const newInternship = await Internship.create({
@@ -33,7 +34,7 @@ export const createIntership = async (req, res) => {
     });
 
 
-    res.status(200).json(newInternship);
+     res.status(200).json(newInternship);
   } catch (err) {
     return res.status(400).json({ error: "Server Error" });
   }
@@ -54,8 +55,8 @@ export const getFilteredInternships = async (req, res, next) => {
       req.query;
     const limit = parseInt(req.query.limit) || 4;
     const skip = (parseInt(page) - 1) * limit;
-
     let filter = { isActive: true };
+
     if (focusOfInternship) {
       focusOfInternship = focusOfInternship.split(",");
       filter.focusOfInternship = { $in: focusOfInternship };
@@ -92,7 +93,7 @@ export const getFilteredInternships = async (req, res, next) => {
 };
 
 
-export const getInternships = async (req, res, next) => { 
+export const getInternships = async (_, res, next) => { 
   try { 
     const limit = 6; 
 
@@ -102,22 +103,31 @@ export const getInternships = async (req, res, next) => {
         typeOfEmployment: "Partial", 
         isActive: true
       },
-      "_id"
+      '_id'
     ).limit(limit);
     
-    const internshipIds = internships.map(internship => String(internship._id));
+    const internshipIds = internships.map(internship => {
+      const id = String(internship._id)
+      return id
+    });
     res.status(200).json(internshipIds); 
   } catch (err) { 
     next(err); 
   } 
 }; 
 
+
+
+
 export const getInternshipsForCompany = async (req, res, next) => {
   try {
+    const internshipObjectId = new mongoose.Types.ObjectId(req.params.id);
+
     const internshipsForComapny = await Internship.find({
-      companyId: req.params.id,
+      companyId: internshipObjectId,
       isActive: true,
     });
+
     res.status(200).json(internshipsForComapny);
   } catch (err) {
     next(err);
@@ -153,21 +163,16 @@ export const setInactiveInternship = async (req, res, next) => {
 
 export const applyForInternship = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
     const idInternship = req.params.id;
     const { id } = req.body;
     const userObjectId = new mongoose.Types.ObjectId(id);
 
 
-    console.log(idInternship,id )
     const existingInternship = await Internship.findOne({
       _id: idInternship,
       participants: userObjectId,
     });
 
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
 
     if (existingInternship) {
       return res
