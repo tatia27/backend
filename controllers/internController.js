@@ -14,12 +14,12 @@ export const register = async (req, res) => {
     const hash = bcrypt.hashSync(password, salt);
 
     if (!firstName || !middleName || !lastName || !email || !password) {
-      return res.status(400).json({ error: "Please fill full form!" });
+      return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
     if (conditions !== true) {
       return res
-        .status(401)
-        .json({ error: "Accept the terms of the agreement" });
+        .status(ERRORS.BAD_REQUEST.CODE)
+        .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
 
     const isEmail = await Intern.findOne({ email });
@@ -39,7 +39,7 @@ export const register = async (req, res) => {
 
     res.status(HTTP_CODES.SUCCESS).json(intern);
   } catch (err) {
-    return res.status(500).json({ error: "Server Error" });
+    next(err);
   }
 };
 
@@ -47,12 +47,10 @@ export const getIntern = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     const { id } = req.params;
-    // console.log(id)
+ 
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
     }
-
-   
 
     validateMongodbId(id, res);
 
@@ -151,13 +149,13 @@ export const createResume = async (req, res, next) => {
 
 export const addToFavoritesInternship = async (req, res, next) => {
   try {
-    // const authHeader = req.headers.authorization;
+    const authHeader = req.headers.authorization;
     const idInternship = req.params.id;
     const { id } = req.body;
     const internshipObjectId = new mongoose.Types.ObjectId(idInternship);
-    // console.log(authHeader);
-    // const token = authHeader.split(" ")[1];
-    // console.log(token)
+    console.log(authHeader);
+    const token = authHeader.split(" ")[1];
+    console.log(token)
 
     const existingInternship = await Intern.findOne({
       _id: id,
@@ -165,13 +163,13 @@ export const addToFavoritesInternship = async (req, res, next) => {
     });
 
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
+    }I
 
     if (existingInternship) {
       return res
-        .status(400)
-        .json({ message: "You have already applied for this internship." });
+        .status(ERRORS.BAD_REQUEST.CODE)
+        .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
 
     const updatedInternship = await Intern.findByIdAndUpdate(
@@ -223,7 +221,7 @@ export const getFavoritesInternship = async (req, res, next) => {
     const id = req.params.id;
     const token = authHeaders.split(" ")[1];
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
     }
 
     const user = await Intern.findById(id);

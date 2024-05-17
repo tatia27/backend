@@ -31,7 +31,7 @@ export const register = async (req, res) => {
 
     res.status(HTTP_CODES.SUCCESS).json(company);
   } catch (err) {
-    return res.status(400).json({ error: "Server Error" });
+    next(err);
   }
 };
 
@@ -52,13 +52,13 @@ export const getCompany = async (req, res, next) => {
 };
 
 export const updateCompany = async (req, res, next) => {
+  try {
   const { name, description } = req.body;
   const updateFields = {};
 
   if (name !== "") updateFields.name = name;
   if (description) updateFields.description = description;
 
-  try {
     const updateCompany = await Company.findByIdAndUpdate(
       req.params.id,
       { $set: updateFields },

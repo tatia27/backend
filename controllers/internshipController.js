@@ -1,5 +1,6 @@
 import Internship from "../models/internshipModel.js";
 import mongoose from "mongoose";
+import {  HTTP_CODES } from "../constants/errors.js";
 import { internships } from "../internships.js";
 
 
@@ -34,16 +35,16 @@ export const createIntership = async (req, res) => {
     });
 
 
-     res.status(200).json(newInternship);
+     res.status(HTTP_CODES.SUCCESS).json(newInternship);
   } catch (err) {
-    return res.status(400).json({ error: "Server Error" });
+    next(err);
   }
 };
 
 export const getInternship = async (req, res, next) => {
   try {
     const internship = await Internship.findById(req.params.id);
-    res.status(200).json(internship);
+    res.status(HTTP_CODES.SUCCESS).json(internship);
   } catch (err) {
     next(err);
   }
@@ -86,12 +87,11 @@ export const getFilteredInternships = async (req, res, next) => {
     const numberOfPages = Math.ceil(totalInternships / limit);
 
     const response = { internships, numberOfPages };
-    res.status(200).json(response);
+    res.status(HTTP_CODES.SUCCESS).json(response);
   } catch (err) {
     next(err);
   }
 };
-
 
 export const getInternships = async (_, res, next) => { 
   try { 
@@ -110,14 +110,11 @@ export const getInternships = async (_, res, next) => {
       const id = String(internship._id)
       return id
     });
-    res.status(200).json(internshipIds); 
+    res.status(HTTP_CODES.SUCCESS).json(internshipIds); 
   } catch (err) { 
     next(err); 
   } 
 }; 
-
-
-
 
 export const getInternshipsForCompany = async (req, res, next) => {
   try {
@@ -128,12 +125,11 @@ export const getInternshipsForCompany = async (req, res, next) => {
       isActive: true,
     });
 
-    res.status(200).json(internshipsForComapny);
+    res.status(HTTP_CODES.SUCCESS).json(internshipsForComapny);
   } catch (err) {
     next(err);
   }
 };
-
 
 export const getInternshipsForIntern = async (req, res, next) => {
   try {
@@ -141,7 +137,7 @@ export const getInternshipsForIntern = async (req, res, next) => {
       participants: req.params.id,
       isActive: true,
     });
-    res.status(200).json(internshipsForIntern);
+    res.status(HTTP_CODES.SUCCESS).json(internshipsForIntern);
   } catch (err) {
     next(err);
   }
@@ -155,7 +151,7 @@ export const setInactiveInternship = async (req, res, next) => {
       { isActive: false },
       { new: true },
     );
-    res.status(200).json(inactiveInternship);
+    res.status(HTTP_CODES.SUCCESS).json(inactiveInternship);
   } catch (err) {
     next(err);
   }
@@ -166,7 +162,6 @@ export const applyForInternship = async (req, res, next) => {
     const idInternship = req.params.id;
     const { id } = req.body;
     const userObjectId = new mongoose.Types.ObjectId(id);
-
 
     const existingInternship = await Internship.findOne({
       _id: idInternship,
@@ -186,7 +181,7 @@ export const applyForInternship = async (req, res, next) => {
       { new: true },
     );
 
-    res.status(200).json(updatedInternship);
+    res.status(HTTP_CODES.SUCCESS).json(updatedInternship);
   } catch (err) {
     next(err);
   }
@@ -198,7 +193,7 @@ export const participantsOfInternship = async (req, res, next) => {
     const internshipObjectId = new mongoose.Types.ObjectId(id);
     const internship = await Internship.findOne({ _id: internshipObjectId });
 
-    res.status(200).json(internship.participants);
+    res.status(HTTP_CODES.SUCCESS).json(internship.participants);
   } catch (err) {
     next(err);
   }

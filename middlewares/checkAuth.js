@@ -21,7 +21,6 @@ export function checkCompanyAuth(req, res, next) {
     next();
 }
 
-
 export function checkInternAuth(req, res, next) {
     const authHeader = req.headers.authorization || "";
     const token = authHeader.split(" ")[1];
@@ -41,8 +40,6 @@ export function checkInternAuth(req, res, next) {
 
     next();
 }
-
-
 
 export function checkAuth(req, res, next) {
     const authHeader = req.headers.authorization || "";
