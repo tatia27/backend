@@ -2,8 +2,10 @@ export const HTTP_CODES = {
     NOT_FOUND: 404, 
     NOT_AUTHORIZED: 401,
     SUCCESS: 200,
+    CREATED: 201,
     BAD_REQUEST: 400,
-    ACCESS_DENIED: 403
+    ACCESS_DENIED: 403,
+    CONFLICT: 409
 }
 
 export const ERRORS = {
@@ -34,5 +36,14 @@ export const ERRORS = {
     ACCESS_DENIED: {
         CODE: HTTP_CODES.ACCESS_DENIED,
         TITLE: "Not allowed to access"
-    }   
+    },
+    CONFLICT: {
+        CODE: HTTP_CODES.CONFLICT,
+        TITLE: "Email already registered"
+    },
+    WRONG_DATA: {
+        CODE: HTTP_CODES.NOT_AUTHORIZED,
+        TITLE: "Email already registered"
+    },
+
 }

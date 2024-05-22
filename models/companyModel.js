@@ -22,6 +22,10 @@ const companySchema = new mongoose.Schema(
     },
     photo: String,
     description: String,
+    accessToken: {
+      type:String,
+      default: null,
+    }
   },
   {
     versionKey: false,

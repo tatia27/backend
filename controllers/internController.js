@@ -1,4 +1,5 @@
 import Intern from "../models/internModel.js";
+import Internship from "../models/internshipModel.js";
 import validateMongodbId from "../utils/validateMongoId.js";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
@@ -25,7 +26,7 @@ export const register = async (req, res) => {
     const isEmail = await Intern.findOne({ email });
 
     if (isEmail) {
-      return res.status(400).json({ error: "Email already registered!" });
+      return res.status(ERRORS.CONFLICT.CODE).json({ message: ERRORS.CONFLICT.TITLE });
     }
 
     const intern = await Intern.create({
@@ -45,13 +46,8 @@ export const register = async (req, res) => {
 
 export const getIntern = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
     const { id } = req.params;
  
-    if (!token) {
-      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
-    }
-
     validateMongodbId(id, res);
 
     const intern = await Intern.findById(req.params.id);
@@ -89,6 +85,7 @@ export const getInterns = async ( res, next) => {
 };
 
 export const updateInternProfile = async (req, res, next) => {
+  try {
   const { firstName, secondName, lastName, description } = req.body;
   const updateFields = {};
 
@@ -96,7 +93,8 @@ export const updateInternProfile = async (req, res, next) => {
   if (secondName) updateFields.secondName = secondName;
   if (lastName) updateFields.lastName = lastName;
   if (description) updateFields.description = description;
-  try {
+
+  
     const updateIntern = await Intern.findByIdAndUpdate(
       mongoose.Types.ObjectId(req.params.id),
       { $set: updateFields },
@@ -149,22 +147,14 @@ export const createResume = async (req, res, next) => {
 
 export const addToFavoritesInternship = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
     const idInternship = req.params.id;
     const { id } = req.body;
     const internshipObjectId = new mongoose.Types.ObjectId(idInternship);
-    console.log(authHeader);
-    const token = authHeader.split(" ")[1];
-    console.log(token)
 
     const existingInternship = await Intern.findOne({
       _id: id,
       favorites: internshipObjectId,
     });
-
-    if (!token) {
-      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
-    }I
 
     if (existingInternship) {
       return res
@@ -186,24 +176,17 @@ export const addToFavoritesInternship = async (req, res, next) => {
 
 export const removeFromFavoritesInternship = async (req, res, next) => {
   try {
-    // const authHeader = req.headers.authorization;
     const internshipId = req.params.id;
-    // console.log(internshipId)
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    // console.log(decoded)
     const internshipObjectId = new mongoose.Types.ObjectId(internshipId);
     const userObjectId = new mongoose.Types.ObjectId(decoded.userId);
 
-    // if (!token) {
-    //   return res.status(401).json({ message: "Unauthorized" });
-    // }
-    
     const existingInternship = await Intern.findOneAndUpdate(
       { _id: userObjectId, favorites: internshipObjectId },
       { $pull: { favorites: internshipObjectId } },
     );
-    // console.log(existingInternship)
+
    
     if (!existingInternship) {
       return res.status(ERRORS.INTERNSHIP_NOT_FOUND.CODE).json({ message: ERRORS.INTERNSHIP_NOT_FOUND.TITLE });
@@ -215,22 +198,18 @@ export const removeFromFavoritesInternship = async (req, res, next) => {
   }
 };
 
-export const getFavoritesInternship = async (req, res, next) => {
+export const getFavoritesInternships = async (req, res, next) => {
   try {
-    const authHeaders = req.headers.authorization;
     const id = req.params.id;
-    const token = authHeaders.split(" ")[1];
-    if (!token) {
-      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
-    }
-
     const user = await Intern.findById(id);
 
     if (!user) {
       return res.status(ERRORS.INTERN_NOT_FOUND.CODE).json({ message: ERRORS.INTERN_NOT_FOUND.TITLE });
     }
+    
+    const favorites = await Internship.find({_id: {$in: user.favorites}});
 
-    res.status(HTTP_CODES.SUCCESS).json( user.favorites );
+    res.status(HTTP_CODES.SUCCESS).json( favorites );
   } catch (err) {
     next(err);
   }

@@ -6,12 +6,11 @@ import {
   logout,
   isAuth,
 } from "../controllers/authController.js";
-import { checkAuth } from "../middlewares/checkAuth.js";
+import {checkAuth,  verifyToken} from "../middlewares/checkAuth.js";
 
+router.post("/login",  login);
 
-router.post("/login", login);
-
-router.get("/logout", logout);
+router.post("/logout",  checkAuth, logout);
 
 router.get("/isAuth", checkAuth, isAuth);
 

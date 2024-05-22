@@ -1,19 +1,22 @@
 import Intern from "../models/internModel.js";
 import Company from "../models/companyModel.js";
 import { generateToken } from "../jwtToken/jwtToken.js";
-import bcrypt from "bcrypt";
 import {ERRORS} from "../constants/errors.js"
 import { HTTP_CODES } from "../constants/errors.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const isPasswordCorrect = async (user, password) => {
   const isCorrect = await bcrypt.compare(password, user.passwordHash);
   return isCorrect;
 };
 
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
-    return res.status(400).json({ error: "Please fill full form!" });
+    return res.status(ERRORS.BAD_REQUEST.CODE).json({ error: "Please fill full form!" });
   }
 
   const intern = await Intern.findOne({ email });
@@ -21,13 +24,13 @@ export const login = async (req, res) => {
 
   if (company) {
     const isCompanyPasswordCorrect = await isPasswordCorrect(company, password);
+
     if (!isCompanyPasswordCorrect) {
-      return res.status(401).json({ error: "Incorrect password" });
+      return res.status(ERRORS.WRONG_DATA.CODE).json({ message: ERRORS.WRONG_DATA.TITLE });
     }
 
     generateToken(
       company,
-      201,
       res,
       company._id,
       company.role,
@@ -35,11 +38,32 @@ export const login = async (req, res) => {
     );
   } else if (intern) {
     const isInternPasswordCorrect = await isPasswordCorrect(intern, password);
+
     if (!isInternPasswordCorrect) {
-      return res.status(401).json({ error: "Incorrect password" });
+      return res.status(ERRORS.WRONG_DATA.CODE).json({ message: ERRORS.WRONG_DATA.TITLE });
     }
 
-    generateToken(intern, 201, res, intern._id, intern.role, "User Loged in!");
+    if (!intern.accessToken) {
+      let token = generateToken( intern._id, intern.role);
+      await Intern.findByIdAndUpdate(
+        intern._id,
+        { $set: { accessToken: token } },
+         {
+          new: true,
+          useFindAndModify: false,
+        },
+      );
+       return  res.status(HTTP_CODES.CREATED).json({
+          success: true,
+          token,
+         }
+        );
+    }
+
+    return res.status(HTTP_CODES.SUCCESS).json({
+      success: true,
+      token: intern.accessToken
+    });
   } else {
     return res.status(ERRORS.USER_NOT_FOUND.CODE).json({ error: ERRORS.USER_NOT_FOUND.TITLE });
   }
@@ -47,6 +71,7 @@ export const login = async (req, res) => {
 
 export const isAuth = async (req, res) => {
   const decoded = req.sessionData; // jwt.verify(token, process.env.JWT_SECRET);
+  
   if (decoded.role === "intern") {
     const intern = await Intern.findOne({ _id: decoded.userId });
     if (intern) {
@@ -69,14 +94,22 @@ export const isAuth = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
+  // const authHeader = req.headers.authorization || "";
+  // const token = authHeader.split(" ")[1];
+  // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log(req.sessionData.userId);
+  // const intern = await Intern.findOne({ _id: req.sessionData.userId });
+  await Intern.findByIdAndUpdate(
+     req.sessionData.userId,
+    { $set: { accessToken: null } },
+     {
+      new: true,
+      useFindAndModify: false,
+    },
+  );
   res
     .status(201)
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
     .json({
-      success: true,
       message: "Logged Out Successfully.",
     });
 };

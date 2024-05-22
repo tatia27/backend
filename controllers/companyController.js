@@ -20,7 +20,7 @@ export const register = async (req, res) => {
     
     const isEmail = await Company.findOne({ email });
     if (isEmail) {
-      return res.status(ERRORS.BAD_REQUEST.CODE).json({ error: ERRORS.BAD_REQUEST.TITLE });
+      return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
     const company = await Company.create({
       name,

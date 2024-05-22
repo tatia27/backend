@@ -57,6 +57,10 @@ const internSchema = new mongoose.Schema(
         type: String,
       },
     },
+    accessToken: {
+      type:String,
+      default: null,
+    }
   },
   {
     versionKey: false,

@@ -1,14 +1,17 @@
 import jwt from "jsonwebtoken";
+import { HTTP_CODES } from "../constants/errors.js";
 
-export const generateToken = (user, statusCode, res, userId, role, message) => {
+export const generateToken = (userId, role) => {
   const token = jwt.sign({ userId, role }, process.env.JWT_SECRET, {
     expiresIn: "100d",
   });
 
-  res.status(statusCode).json({
-    success: true,
-    user,
-    message,
-    token,
-  });
+  // res.status(HTTP_CODES.CREATED).json({
+  //   success: true,
+  //   user,
+  //   message,
+  //   token,
+  // }
+  // );
+  return token;
 };

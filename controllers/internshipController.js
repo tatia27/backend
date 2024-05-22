@@ -44,6 +44,7 @@ export const createIntership = async (req, res) => {
 export const getInternship = async (req, res, next) => {
   try {
     const internship = await Internship.findById(req.params.id);
+
     res.status(HTTP_CODES.SUCCESS).json(internship);
   } catch (err) {
     next(err);
@@ -93,7 +94,7 @@ export const getFilteredInternships = async (req, res, next) => {
   }
 };
 
-export const getInternships = async (_, res, next) => { 
+export const getPopularInternships = async (_, res, next) => { 
   try { 
     const limit = 6; 
 
@@ -110,7 +111,32 @@ export const getInternships = async (_, res, next) => {
       const id = String(internship._id)
       return id
     });
+
     res.status(HTTP_CODES.SUCCESS).json(internshipIds); 
+  } catch (err) { 
+    next(err); 
+  } 
+}; 
+
+export const getNewPopularInternships = async (_, res, next) => { 
+  try { 
+    const limit = 6; 
+
+    const internships = await Internship.find(
+      {
+        salary: { $ne: null }, 
+        typeOfEmployment: "Partial", 
+        isActive: true
+      },
+      // '_id'
+    ).limit(limit);
+    
+    // const internshipIds = internships.map(internship => {
+    //   const id = String(internship._id)
+    //   return id
+    // });
+
+    res.status(HTTP_CODES.SUCCESS).json(internships); 
   } catch (err) { 
     next(err); 
   } 
@@ -198,6 +224,7 @@ export const participantsOfInternship = async (req, res, next) => {
     next(err);
   }
 };
+
 
 // Заполнение коллекции internships стажировками из файла internship.js
 // const insertInternships = async () => {

@@ -7,21 +7,21 @@ import {
   updateInternProfile,
   createResume,
   addToFavoritesInternship,
-  getFavoritesInternship,
+  getFavoritesInternships,
   getInternForCompany,
   removeFromFavoritesInternship
 } from "../controllers/internController.js";
-import {checkAuth, checkInternAuth} from "../middlewares/checkAuth.js"
- 
+import {checkAuth, checkInternAuth, verifyToken} from "../middlewares/checkAuth.js";
+
 // public  
 router.post("/", register);
 
 // authorized
-router.get("/:id", checkAuth, getIntern);
+router.get("/:id/one",   checkAuth, verifyToken,  getIntern);
 
 // intern only
-router.put("/:id/resume",  checkInternAuth, createResume);
-router.get("/:id/favorites", checkInternAuth, getFavoritesInternship);
+router.put("/:id/resume",   checkInternAuth,  createResume);
+router.get("/:id/favorites", checkInternAuth,  getFavoritesInternships);
 router.get("/:id/apply-to-internship", checkInternAuth,  getInternForCompany);
 router.patch("/:id/add-to-favorites", checkInternAuth, addToFavoritesInternship);
 router.patch("/:id/remove-from-favorites", checkInternAuth,  removeFromFavoritesInternship);
