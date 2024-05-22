@@ -61,16 +61,13 @@ export function checkAuth(req, res, next) {
     next();
 }
 
-
-
 export const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     const actualToken = authHeader.split(' ')[1];
 
     if (!actualToken) {
-      //  add constant 
-      return res.status(403).send('A token is required for authentication');
+      return res.status(ERRORS.ACCESS_DENIED.CODE).json({ massage: ERRORS.ACCESS_DENIED.TITLE });
     }
 
     const decoded = jwt.verify(actualToken, process.env.JWT_SECRET);
@@ -79,23 +76,23 @@ export const verifyToken = async (req, res, next) => {
     const intern = await Intern.findOne({ _id: decoded.userId });
 
     if (company) {
-        // Добавить обработку токена для компании
     const decodedAccessToken = jwt.verify(company.accessToken, process.env.JWT_SECRET);
-
-      if (decoded == decodedAccessToken) {
-        return next();
-      }
-      return res.status(403).send('bad');
+    
+    if (JSON.stringify(decoded) === JSON.stringify(decodedAccessToken)) {
+      return  next();
+    }
+    
+      return res.status(ERRORS.ACCESS_DENIED.CODE).json({message: ERRORS.ACCESS_DENIED.TITLE});
     } else if(intern){
     const decodedAccessToken = jwt.verify(intern.accessToken, process.env.JWT_SECRET);
 
       if (JSON.stringify(decoded) === JSON.stringify(decodedAccessToken)) {
         return  next();
       }
-      return res.status(403).send('bad');
+      return res.status(ERRORS.ACCESS_DENIED.CODE).json({message: ERRORS.ACCESS_DENIED.TITLE});
     }
   
     } catch (err) {
-      return res.status(400).send('Invalid Token');
+      return res.status(ERRORS.BAD_REQUEST.CODE).json(ERRORS.BAD_REQUEST.TITLE);
     }
   };

@@ -29,13 +29,27 @@ export const login = async (req, res) => {
       return res.status(ERRORS.WRONG_DATA.CODE).json({ message: ERRORS.WRONG_DATA.TITLE });
     }
 
-    generateToken(
-      company,
-      res,
-      company._id,
-      company.role,
-      "User Loged in!",
-    );
+    if (!company.accessToken) {
+      let token = generateToken( company._id, company.role);
+      await Company.findByIdAndUpdate(
+        company._id,
+        { $set: { accessToken: token } },
+         {
+          new: true,
+          useFindAndModify: false,
+        },
+      );
+       return  res.status(HTTP_CODES.CREATED).json({
+          success: true,
+          token,
+         }
+        );
+    }
+
+    return res.status(HTTP_CODES.SUCCESS).json({
+      success: true,
+      token: company.accessToken
+    });
   } else if (intern) {
     const isInternPasswordCorrect = await isPasswordCorrect(intern, password);
 
@@ -94,11 +108,7 @@ export const isAuth = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  // const authHeader = req.headers.authorization || "";
-  // const token = authHeader.split(" ")[1];
-  // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(req.sessionData.userId);
-  // const intern = await Intern.findOne({ _id: req.sessionData.userId });
+
   await Intern.findByIdAndUpdate(
      req.sessionData.userId,
     { $set: { accessToken: null } },

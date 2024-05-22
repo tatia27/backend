@@ -20,10 +20,10 @@ router.post("/", register);
 router.get("/:id/one",   checkAuth, verifyToken,  getIntern);
 
 // intern only
-router.put("/:id/resume",   checkInternAuth,  createResume);
-router.get("/:id/favorites", checkInternAuth,  getFavoritesInternships);
-router.get("/:id/apply-to-internship", checkInternAuth,  getInternForCompany);
-router.patch("/:id/add-to-favorites", checkInternAuth, addToFavoritesInternship);
-router.patch("/:id/remove-from-favorites", checkInternAuth,  removeFromFavoritesInternship);
+router.put("/:id/resume",   checkInternAuth, verifyToken, createResume);
+router.get("/:id/favorites", checkInternAuth, verifyToken, getFavoritesInternships);
+router.get("/:id/apply-to-internship", checkInternAuth, verifyToken,  getInternForCompany);
+router.patch("/:id/add-to-favorites", checkInternAuth, verifyToken, addToFavoritesInternship);
+router.patch("/:id/remove-from-favorites", checkInternAuth, verifyToken,  removeFromFavoritesInternship);
 
 export default router;

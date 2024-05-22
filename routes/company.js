@@ -5,7 +5,7 @@ import {
   updateCompany,
   getUsersForInternship,
 } from "../controllers/companyController.js";
-import { checkCompanyAuth } from "../middlewares/checkAuth.js";
+import { checkCompanyAuth, verifyToken } from "../middlewares/checkAuth.js";
 
 const router = express.Router();
 
@@ -13,8 +13,8 @@ const router = express.Router();
 router.post("/", register);
 
 // company only
-router.get("/:id", checkCompanyAuth, getCompany);
-router.patch("/:id", checkCompanyAuth, updateCompany);
-router.get("/interns", checkCompanyAuth, getUsersForInternship);
+router.get("/:id", checkCompanyAuth, verifyToken, getCompany);
+router.patch("/:id", checkCompanyAuth, verifyToken, updateCompany);
+router.get("/interns", checkCompanyAuth, verifyToken, getUsersForInternship);
 
 export default router;
