@@ -6,7 +6,7 @@ import {
   logout,
   isAuth,
 } from "../controllers/authController.js";
-import {checkAuth,  verifyToken} from "../middlewares/checkAuth.js";
+import {checkAuth} from "../middlewares/checkAuth.js";
 
 router.post("/login",  login);
 

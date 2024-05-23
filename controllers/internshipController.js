@@ -94,29 +94,6 @@ export const getFilteredInternships = async (req, res, next) => {
   }
 };
 
-export const getPopularInternships = async (_, res, next) => { 
-  try { 
-    const limit = 6; 
-
-    const internships = await Internship.find(
-      {
-        salary: { $ne: null }, 
-        typeOfEmployment: "Partial", 
-        isActive: true
-      },
-      '_id'
-    ).limit(limit);
-    
-    const internshipIds = internships.map(internship => {
-      const id = String(internship._id)
-      return id
-    });
-
-    res.status(HTTP_CODES.SUCCESS).json(internshipIds); 
-  } catch (err) { 
-    next(err); 
-  } 
-}; 
 
 export const getNewPopularInternships = async (_, res, next) => { 
   try { 
@@ -128,14 +105,8 @@ export const getNewPopularInternships = async (_, res, next) => {
         typeOfEmployment: "Partial", 
         isActive: true
       },
-      // '_id'
     ).limit(limit);
     
-    // const internshipIds = internships.map(internship => {
-    //   const id = String(internship._id)
-    //   return id
-    // });
-
     res.status(HTTP_CODES.SUCCESS).json(internships); 
   } catch (err) { 
     next(err); 

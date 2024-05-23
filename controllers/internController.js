@@ -151,24 +151,27 @@ export const addToFavoritesInternship = async (req, res, next) => {
     const { id } = req.body;
     const internshipObjectId = new mongoose.Types.ObjectId(idInternship);
 
-    const existingInternship = await Intern.findOne({
+    const existingIntern = await Intern.findOne({
       _id: id,
-      favorites: internshipObjectId,
     });
 
-    if (existingInternship) {
+    if (!existingIntern) {
       return res
         .status(ERRORS.BAD_REQUEST.CODE)
         .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
 
-    const updatedInternship = await Intern.findByIdAndUpdate(
+     await Intern.findByIdAndUpdate(
       id,
       { $push: { favorites: internshipObjectId } },
       { new: true },
     );
 
-    res.status(HTTP_CODES.SUCCESS).json(updatedInternship);
+    const internship = await Internship.findById(internshipObjectId)
+
+    res.status(HTTP_CODES.SUCCESS).json({ 
+      internship
+    });
   } catch (err) {
     next(err);
   }
@@ -177,22 +180,21 @@ export const addToFavoritesInternship = async (req, res, next) => {
 export const removeFromFavoritesInternship = async (req, res, next) => {
   try {
     const internshipId = req.params.id;
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const { id } = req.body;
     const internshipObjectId = new mongoose.Types.ObjectId(internshipId);
-    const userObjectId = new mongoose.Types.ObjectId(decoded.userId);
+    const userObjectId = new mongoose.Types.ObjectId(id);
 
-    const existingInternship = await Intern.findOneAndUpdate(
-      { _id: userObjectId, favorites: internshipObjectId },
+    const existingIntern = await Intern.findOneAndUpdate(
+      { _id: userObjectId },
       { $pull: { favorites: internshipObjectId } },
+      { new: true },
     );
 
-   
-    if (!existingInternship) {
+    if (!existingIntern) {
       return res.status(ERRORS.INTERNSHIP_NOT_FOUND.CODE).json({ message: ERRORS.INTERNSHIP_NOT_FOUND.TITLE });
     }
 
-    res.status(HTTP_CODES.SUCCESS).json({ message: "Internship removed from favorites." });
+    res.status(HTTP_CODES.SUCCESS).json(existingIntern.favorites);
   } catch (err) {
     next(err);
   }

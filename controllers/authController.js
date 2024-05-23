@@ -4,7 +4,7 @@ import { generateToken } from "../jwtToken/jwtToken.js";
 import {ERRORS} from "../constants/errors.js"
 import { HTTP_CODES } from "../constants/errors.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+
 
 const isPasswordCorrect = async (user, password) => {
   const isCorrect = await bcrypt.compare(password, user.passwordHash);
@@ -16,7 +16,7 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(ERRORS.BAD_REQUEST.CODE).json({ error: "Please fill full form!" });
+    return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: "Please fill full form!" });
   }
 
   const intern = await Intern.findOne({ email });
@@ -83,6 +83,7 @@ export const login = async (req, res) => {
   }
 };
 
+
 export const isAuth = async (req, res) => {
   const decoded = req.sessionData; // jwt.verify(token, process.env.JWT_SECRET);
   
@@ -107,6 +108,7 @@ export const isAuth = async (req, res) => {
  
 };
 
+
 export const logout = async (req, res) => {
 
   await Intern.findByIdAndUpdate(
@@ -117,8 +119,9 @@ export const logout = async (req, res) => {
       useFindAndModify: false,
     },
   );
+
   res
-    .status(201)
+    .status(HTTP_CODES.CREATED)
     .json({
       message: "Logged Out Successfully.",
     });

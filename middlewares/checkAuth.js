@@ -4,18 +4,18 @@ import Company from "../models/companyModel.js";
 import { ERRORS } from "../constants/errors.js";
 
 export function checkCompanyAuth(req, res, next) {
+  try{
     const authHeader = req.headers.authorization || "";
     const token = authHeader.split(" ")[1];
 
     if(!token) {
         return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
     }
-
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if(decoded.role !== "company") {
-            throw new Error();
-        }
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if(decoded.role !== "company") {
+       throw new Error();
+    }
     }catch(error){
         return res.status(ERRORS.ACCESS_DENIED.CODE).json({ message: ERRORS.ACCESS_DENIED.TITLE });
     }
@@ -24,18 +24,19 @@ export function checkCompanyAuth(req, res, next) {
 }
 
 export function checkInternAuth(req, res, next) {
+  try{
     const authHeader = req.headers.authorization || "";
     const token = authHeader.split(" ")[1];
 
     if(!token) {
         return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
     }
-
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if(decoded.role !== "intern") {
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+   
+    if(decoded.role !== "intern") {
             throw new Error();
-        }
+    }
     }catch(error){
         return res.status(ERRORS.ACCESS_DENIED.CODE).json({ message: ERRORS.ACCESS_DENIED.TITLE });
     }
@@ -44,21 +45,22 @@ export function checkInternAuth(req, res, next) {
 }
 
 export function checkAuth(req, res, next) {
-    const authHeader = req.headers.authorization || "";
-    const token = authHeader.split(" ")[1];
+  try{ 
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.split(" ")[1];
 
-    if(!token) {
-        return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
-    }
+  if(!token) {
+      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
+  }
+  
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  req.sessionData = decoded;
 
-    try{ 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.sessionData = decoded;
-    }catch(error){
-        return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
-    }
-     
-    next();
+  }catch(error){
+      return res.status(ERRORS.NOT_AUTHORIZED.CODE).json({ message: ERRORS.NOT_AUTHORIZED.TITLE });
+  }
+   
+  next();
 }
 
 export const verifyToken = async (req, res, next) => {

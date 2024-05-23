@@ -3,7 +3,6 @@ const router = express.Router();
 import {
   createIntership,
   getInternship,
-  getPopularInternships,
   getFilteredInternships,
   getNewPopularInternships,
   getInternshipsForCompany,
@@ -16,7 +15,6 @@ import {  checkCompanyAuth, checkInternAuth } from "../middlewares/checkAuth.js"
 
 // public
 router.get("", getFilteredInternships);
-router.get("/popular", getPopularInternships);
 router.get("/new-popular", getNewPopularInternships);
 router.get("/:id", getInternship);
 
