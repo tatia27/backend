@@ -11,12 +11,13 @@ export const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    if (!name || !email || !password) {
+    if (!name || !email || password.length < 8) {
       return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE});
     }
     if (conditions !== true) {
       return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE});
     }
+  
     
     const isEmail = await Company.findOne({ email });
     if (isEmail) {

@@ -2,10 +2,8 @@ import Intern from "../models/internModel.js";
 import Internship from "../models/internshipModel.js";
 import validateMongodbId from "../utils/validateMongoId.js";
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import { ERRORS, HTTP_CODES } from "../constants/errors.js";
-
+import bcrypt from "bcrypt";
 
 export const register = async (req, res) => {
   try {
@@ -14,7 +12,7 @@ export const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    if (!firstName || !middleName || !lastName || !email || !password) {
+    if (!firstName || !middleName || !lastName || !email || password.lenght < 8) {
       return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
     if (conditions !== true) {
@@ -53,6 +51,32 @@ export const getIntern = async (req, res, next) => {
     const intern = await Intern.findById(req.params.id);
 
     res.status(HTTP_CODES.SUCCESS).json(intern);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateIntern = async (req, res, next) => {
+  try {
+  const { firstName, middleName, lastName, email } = req.body;
+  const updateFields = {};
+
+  if (firstName !== "") updateFields.firstName = firstName;
+  if (middleName !== "") updateFields.middleName = middleName;
+  if (lastName !== "") updateFields.lastName = lastName;
+  if (email !== "") updateFields.email = email;
+
+  const existingIntern = await Intern.findOne({ email: email });
+  if (existingIntern) {
+    return res.status(ERRORS.CONFLICT.CODE).json(ERRORS.CONFLICT.TITLE);
+  } 
+  
+  const updateIntern = await Intern.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateFields },
+      { new: true },
+    );
+    res.status(HTTP_CODES.SUCCESS).json(updateIntern);
   } catch (err) {
     next(err);
   }
@@ -119,6 +143,11 @@ export const createResume = async (req, res, next) => {
     } = req.body;
     const { id } = req.params;
     
+    if (age < 16 || !location || !levelOfEducation || !educationalInstitution 
+      || !specialization || !hardSkills || !softSkills) {
+      return res.status(ERRORS.BAD_REQUEST.CODE).json(ERRORS.BAD_REQUEST.TITLE)
+    }
+
     const updateFields = {};
     if (age !== undefined) updateFields["cv.age"] = age;
     if (location) updateFields["cv.location"] = location;

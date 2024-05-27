@@ -4,7 +4,7 @@ const router = express.Router();
 import {
   register,
   getIntern,
-  updateInternProfile,
+  updateIntern,
   createResume,
   addToFavoritesInternship,
   getFavoritesInternships,
@@ -21,6 +21,7 @@ router.get("/:id/one",   checkAuth, verifyToken,  getIntern);
 
 // intern only
 router.put("/:id/resume",   checkInternAuth, verifyToken, createResume);
+router.patch("/:id/update-intern",   checkInternAuth, verifyToken, updateIntern);
 router.get("/:id/favorites", checkInternAuth, verifyToken, getFavoritesInternships);
 router.get("/:id/apply-to-internship", checkInternAuth, verifyToken,  getInternForCompany);
 router.patch("/:id/add-to-favorites", checkInternAuth, verifyToken, addToFavoritesInternship);

@@ -1,8 +1,7 @@
 import Internship from "../models/internshipModel.js";
 import mongoose from "mongoose";
-import {  HTTP_CODES } from "../constants/errors.js";
+import {  HTTP_CODES, ERRORS } from "../constants/errors.js";
 import { internships } from "../internships.js";
-
 
 export const createIntership = async (req, res) => {
   try {
@@ -19,6 +18,10 @@ export const createIntership = async (req, res) => {
     } = req.body;
     const companyId = req.params.id;
     const companyObjectId = new mongoose.Types.ObjectId(companyId);
+
+    if (!title || !company || !durationOfInternship || salary < 0 || !conditions || !skills) {
+      return res.status(ERRORS.BAD_REQUEST.CODE).json(ERRORS.BAD_REQUEST.TITLE);
+    }
 
     const newInternship = await Internship.create({
       title,
