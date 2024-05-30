@@ -57,7 +57,7 @@ export const updateCompany = async (req, res, next) => {
   const { name, description } = req.body;
   const updateFields = {};
 
-  if (name !== "") updateFields.name = name;
+  if (name) updateFields.name = name;
   if (description) updateFields.description = description;
 
     const updateCompany = await Company.findByIdAndUpdate(
@@ -79,7 +79,6 @@ export const getUsersForInternship = async (req, res, next) => {
     const internship = await Internship.findById(internshipObjectId, {
       participants: 1,
     });
-
     if (!internship) {
       return res.status(ERRORS.INTERNSHIP_NOT_FOUND.CODE).json({ message: ERRORS.INTERNSHIP_NOT_FOUND.TITLE });
     }
