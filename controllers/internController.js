@@ -36,7 +36,7 @@ export const register = async (req, res) => {
       role: "intern",
     });
 
-    res.status(HTTP_CODES.SUCCESS).json(intern);
+    res.status(HTTP_CODES.SUCCESS).json({ firstName: intern.firstName, middleName: intern.middleName, lastName: intern.lastName, email: intern.email });
   } catch (err) {
     next(err);
   }
@@ -50,7 +50,7 @@ export const getIntern = async (req, res, next) => {
 
     const intern = await Intern.findById(req.params.id);
 
-    res.status(HTTP_CODES.SUCCESS).json(intern);
+    res.status(HTTP_CODES.SUCCESS).json({ cv: intern.cv, email: intern.email, firstName: intern.firstName, middleName: intern.middleName, lastName: intern.lastName });
   } catch (err) {
     next(err);
   }
@@ -76,7 +76,8 @@ export const updateIntern = async (req, res, next) => {
       { $set: updateFields },
       { new: true },
     );
-    res.status(HTTP_CODES.SUCCESS).json(updateIntern);
+
+  res.status(HTTP_CODES.SUCCESS).json({ firstName: updateIntern.firstName, middleName:  updateIntern.middleName, lastName:  updateIntern.lastName, email: updateIntern.email });
   } catch (err) {
     next(err);
   }
@@ -93,38 +94,6 @@ export const getInternForCompany = async (req, res, next) => {
     res
       .status(HTTP_CODES.SUCCESS)
       .json({ firstName: intern.firstName, lastName: intern.lastName });
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const getInterns = async ( res, next) => {
-  try {
-    const interns = await Intern.find();
-
-    res.status(HTTP_CODES.SUCCESS).json(interns);
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const updateInternProfile = async (req, res, next) => {
-  try {
-  const { firstName, secondName, lastName, description } = req.body;
-  const updateFields = {};
-
-  if (firstName) updateFields.firstName = firstName;
-  if (secondName) updateFields.secondName = secondName;
-  if (lastName) updateFields.lastName = lastName;
-  if (description) updateFields.description = description;
-
-  
-    const updateIntern = await Intern.findByIdAndUpdate(
-      mongoose.Types.ObjectId(req.params.id),
-      { $set: updateFields },
-      { new: true },
-    );
-    res.status(HTTP_CODES.SUCCESS).json(updateIntern);
   } catch (err) {
     next(err);
   }
@@ -168,7 +137,7 @@ export const createResume = async (req, res, next) => {
       },
     );
 
-    res.status(HTTP_CODES.SUCCESS).json(updateIntern);
+    res.status(HTTP_CODES.SUCCESS).json({cv: updateIntern.cv, firstName: updateIntern.firstName, middleName: updateIntern.middleName, lastName: updateIntern.lastName,  email: updateIntern.email, });
   } catch (err) {
     next(err);
   }
@@ -229,6 +198,8 @@ export const removeFromFavoritesInternship = async (req, res, next) => {
   }
 };
 
+
+// TODO что-то не так
 export const getFavoritesInternships = async (req, res, next) => {
   try {
     const id = req.params.id;

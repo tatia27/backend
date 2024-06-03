@@ -7,7 +7,6 @@ import internship from "./routes/internship.js";
 import authorization from "./routes/authorization.js";
 import { connect } from "./database/database.js";
 import cors from "cors";
-import {checkCompanyAuth } from "./middlewares/checkAuth.js"
 
 export const app = express();
 
@@ -22,7 +21,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-  // Some middleware logic
   next();
 });
 
@@ -34,5 +32,5 @@ app.use("/v1/internships", internship);
 
 app.listen(process.env.PORT, () => {
   connect();
-  // console.log(`App listening on port ${process.env.PORT}`);
+  console.log(`App listening on port ${process.env.PORT}`);
 });

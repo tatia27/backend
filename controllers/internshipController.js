@@ -1,5 +1,5 @@
-import Internship from "../models/internshipModel.js";
 import mongoose from "mongoose";
+import Internship from "../models/internshipModel.js";
 import {  HTTP_CODES, ERRORS } from "../constants/errors.js";
 import { internships } from "../internships.js";
 
@@ -98,7 +98,7 @@ export const getFilteredInternships = async (req, res, next) => {
 };
 
 
-export const getNewPopularInternships = async (_, res, next) => { 
+export const getNewPopularInternships = async (req, res, next) => { 
   try { 
     const limit = 6; 
 
@@ -137,12 +137,12 @@ export const getInternshipsForIntern = async (req, res, next) => {
       participants: req.params.id,
       isActive: true,
     });
+    
     res.status(HTTP_CODES.SUCCESS).json(internshipsForIntern);
   } catch (err) {
     next(err);
   }
 };
-
 
 export const setInactiveInternship = async (req, res, next) => {
   try {
@@ -151,6 +151,7 @@ export const setInactiveInternship = async (req, res, next) => {
       { isActive: false },
       { new: true },
     );
+
     res.status(HTTP_CODES.SUCCESS).json(inactiveInternship);
   } catch (err) {
     next(err);
@@ -171,8 +172,8 @@ export const applyForInternship = async (req, res, next) => {
 
     if (existingInternship) {
       return res
-        .status(400)
-        .json({ message: "You have already applied for this internship." });
+        .status(ERRORS.BAD_REQUEST.CODE)
+        .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
 
     const updatedInternship = await Internship.findByIdAndUpdate(

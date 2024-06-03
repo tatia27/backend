@@ -111,15 +111,26 @@ export const isAuth = async (req, res) => {
 
 export const logout = async (req, res) => {
 
-  await Intern.findByIdAndUpdate(
-     req.sessionData.userId,
-    { $set: { accessToken: null } },
-     {
-      new: true,
-      useFindAndModify: false,
-    },
-  );
-
+  if(req.sessionData.role == "intern") {
+    await Intern.findByIdAndUpdate(
+      req.sessionData.userId,
+     { $set: { accessToken: null } },
+      {
+       new: true,
+       useFindAndModify: false,
+     },
+   ); 
+  }else {
+    await Company.findByIdAndUpdate(
+      req.sessionData.userId,
+     { $set: { accessToken: null } },
+      {
+       new: true,
+       useFindAndModify: false,
+     },
+   ); 
+  }
+ 
   res
     .status(HTTP_CODES.CREATED)
     .json({
