@@ -20,7 +20,6 @@ const companySchema = new mongoose.Schema(
       required: true,
       enum: ["intern", "company"],
     },
-    photo: String,
     description: String,
     accessToken: {
       type:String,

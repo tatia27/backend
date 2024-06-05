@@ -1,5 +1,5 @@
 import request from "supertest"
-import { app } from "./index.js";
+import { app } from "../index.js";
 
 // TRUE INTERNS
 const correctItern = {

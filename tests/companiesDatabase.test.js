@@ -1,5 +1,5 @@
 import request from "supertest"
-import { app } from "./index.js";
+import { app } from "../index.js";
 
 const authHeader = {
     AuthorizationServer: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUyMmYzZjcwNDBiMmNjMGRlN2RkZTEiLCJyb2xlIjoiY29tcGFueSIsImlhdCI6MTcxNjY2MjEwOSwiZXhwIjoxNzI1MzAyMTA5fQ.Hxx05kWkryBQqeSw2WF_KVrHiOkIl6xLUzvwKCa0Dek"

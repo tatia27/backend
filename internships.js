@@ -10,7 +10,7 @@ export const internships = [
     skills: "Python, MongoDB",
     conditions: "Понимание ООП, SOLID, умение решать алгоритмические задачи на базовом уровне",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "Backend разработчик PHP",
@@ -23,7 +23,7 @@ export const internships = [
     skills: "PHP, PostgreSQL, Magento",
     conditions: "Понимание ООП, SOLID, умение решать алгоритмические задачи на базовом уровне",
     isActive: "true",
-    companyId: "664702035cdc5893c5d10147",
+    companyId: "665ec4db6cd3bad888870bfa",
   },
   {
     title: "Frontend  React разработчик",
@@ -36,7 +36,7 @@ export const internships = [
     skills: "Опыт работы с React и Typescript, HTML, CSS, SCCS/LESS/SASS",
     conditions: "Понимание ООП, SOLID",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "Frontend Angular разработчик",
@@ -49,7 +49,7 @@ export const internships = [
     skills: "AngularJS, HTML, CSS",
     conditions: "Понимание ООП, опыт написания Unit-тестов",
     isActive: "true",
-    companyId: "6647022b5cdc5893c5d1014c",
+    companyId: "665ec5036cd3bad888870bff",
   },
   {
     title: "Frontend Vue разработчик",
@@ -62,7 +62,7 @@ export const internships = [
     skills: "Vue, TypeScript, JS, HTML, CSS",
     conditions: "Понимание ООП, SOLID, опыт написания Unit-тестов",
     isActive: "true",
-    companyId: "664702035cdc5893c5d10147",
+    companyId: "665ec4db6cd3bad888870bfa",
   },
   {
     title: "Frontend разработчик",
@@ -75,7 +75,7 @@ export const internships = [
     skills: "React, Angular",
     conditions: "React, Angular, JS, HTML, CSS",
     isActive: "true",
-    companyId: "664704775cdc5893c5d10151",
+    companyId: "665ec51e6cd3bad888870c04",
   },
   {
     title: "UI/UX дизайнер",
@@ -88,7 +88,7 @@ export const internships = [
     skills: "Figma, Photoshop",
     conditions: "Figma, основы композиции",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "UI/UX дизайнер",
@@ -101,7 +101,7 @@ export const internships = [
     skills: "Figma, Photoshop",
     conditions: "Figma, основы композиции",
     isActive: "true",
-    companyId: "6647022b5cdc5893c5d1014c",
+    companyId: "665ec5036cd3bad888870bff",
   },
   {
     title: "UI дизайнер",
@@ -114,7 +114,7 @@ export const internships = [
     skills: "Figma, Adobe Photoshop",
     conditions: "Figma, Adobe Photoshop, основы композиции",
     isActive: "true",
-    companyId: "664702035cdc5893c5d10147",
+    companyId: "665ec4db6cd3bad888870bfa",
   },
   {
     title: "Тестировщик веб-приложений",
@@ -127,7 +127,7 @@ export const internships = [
     skills: "-",
     conditions: "-",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "Тестировщик веб-приложений",
@@ -140,7 +140,7 @@ export const internships = [
     skills: "Jest",
     conditions: "Владение теорией тестирования, умение писать авто-тесты, умение писать SQL-запросы",
     isActive: "true",
-    companyId: "6647022b5cdc5893c5d1014c",
+    companyId: "665ec5036cd3bad888870bff",
   },
   {
     title: "Тестировщик игр",
@@ -153,7 +153,7 @@ export const internships = [
     skills: "-",
     conditions: "Владение теорией тестирования",
     isActive: "true",
-    companyId: "6647049d5cdc5893c5d1015e",
+    companyId: "665ec5546cd3bad888870c09",
   },
   {
     title: "Тестировщик веб-приложений",
@@ -179,7 +179,7 @@ export const internships = [
     skills: "Kotlin",
     conditions: "ООП",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "Мобильный разработчик",
@@ -192,7 +192,7 @@ export const internships = [
     skills: "Kotlin, Java",
     conditions: "Понимание ООП, SOLID",
     isActive: "true",
-    companyId: "6647022b5cdc5893c5d1014c",
+    companyId: "665ec5036cd3bad888870bff",
   },
   {
     title: "Менеджер",
@@ -205,7 +205,7 @@ export const internships = [
     skills: "-",
     conditions: "-",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "HR менеджер",
@@ -218,7 +218,7 @@ export const internships = [
     skills: "-",
     conditions: "-",
     isActive: "true",
-    companyId: "6646ffcced63de23bc714aa6",
+    companyId: "665c9be229995c039766307b",
   },
   {
     title: "HR менеджер",
@@ -231,7 +231,7 @@ export const internships = [
     skills: "-",
     conditions: "-",
     isActive: "true",
-    companyId: "6647022b5cdc5893c5d1014c",
+    companyId: "665ec5036cd3bad888870bff",
   },
   {
     title: "C++ разработчик",
@@ -244,7 +244,7 @@ export const internships = [
     skills: "ООП, SOLID",
     conditions: "ООП, SOLID",
     isActive: "true",
-    companyId: "664704d65cdc5893c5d10168",
+    companyId: "665ec59a6cd3bad888870c0e",
   },
   {
     title: "Аналитик",
@@ -257,6 +257,6 @@ export const internships = [
     skills: "-",
     conditions: "-",
     isActive: "true",
-    companyId: "664704b65cdc5893c5d10163",
+    companyId: "665ec5b66cd3bad888870c13",
   },
 ];

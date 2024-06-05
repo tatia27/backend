@@ -6,6 +6,7 @@ import intern from "./routes/intern.js";
 import internship from "./routes/internship.js";
 import authorization from "./routes/authorization.js";
 import { connect } from "./database/database.js";
+import { errorHandler } from "./utils/error.js";
 import cors from "cors";
 
 export const app = express();
@@ -29,6 +30,8 @@ app.use("/v1/company",  company);
 app.use("/v1/intern", intern);
 app.use("/v1/auth", authorization);
 app.use("/v1/internships", internship);
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
   connect();

@@ -5,7 +5,8 @@ export const HTTP_CODES = {
     CREATED: 201,
     BAD_REQUEST: 400,
     ACCESS_DENIED: 403,
-    CONFLICT: 409
+    CONFLICT: 409,
+    SERVER_ERROR: 500
 }
 
 export const ERRORS = {
@@ -45,5 +46,8 @@ export const ERRORS = {
         CODE: HTTP_CODES.NOT_AUTHORIZED,
         TITLE: "Email already registered"
     },
-
+    SERVER_ERROR: {
+        CODE: HTTP_CODES.SERVER_ERROR,
+        TITLE: "Internal Server Error"
+    },
 }

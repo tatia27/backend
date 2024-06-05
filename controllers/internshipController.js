@@ -111,7 +111,7 @@ export const getNewPopularInternships = async (req, res, next) => {
     ).limit(limit);
     
     res.status(HTTP_CODES.SUCCESS).json(internships); 
-  } catch (err) { 
+  } catch (err) {
     next(err); 
   } 
 }; 
@@ -205,7 +205,7 @@ export const participantsOfInternship = async (req, res, next) => {
 // const insertInternships = async () => {
 //   try {
 //     const internship = await Internship.insertMany(internships);
-//     return Promise.resolve(internship);
+//     return Promise.resolve(internship);м
 //   } catch (err) {
 //     return Promise.reject(err);
 //   }

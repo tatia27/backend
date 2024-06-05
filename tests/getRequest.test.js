@@ -1,6 +1,6 @@
 import request from "supertest"
-import { app } from "./index.js";
-import internModel from "./models/internModel.js";
+import { app } from "../index.js";
+import internModel from "../models/internModel.js";
 
 const authUser = {
     email: "palashkindmitriy@gmail.com",

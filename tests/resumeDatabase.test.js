@@ -1,10 +1,11 @@
 import request from "supertest"
-import { app } from "./index.js";
+import { app } from "../index.js";
 
 const authUser = {
     email: "chepurnaia@gmail.com",
     password: "Password123"
 }
+
 const authHeader = {
     Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjUzNGQ5ZmQxNjE5ZThkMWRkNTI4ZWIiLCJyb2xlIjoiaW50ZXJuIiwiaWF0IjoxNzE2NzM1ODg3LCJleHAiOjE3MjUzNzU4ODd9.MSailTKdgwhoX_txdKFU44uf50AfFHAwYR4_J75QuPE"
 }

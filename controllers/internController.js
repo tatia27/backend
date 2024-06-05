@@ -199,7 +199,6 @@ export const removeFromFavoritesInternship = async (req, res, next) => {
 };
 
 
-// TODO что-то не так
 export const getFavoritesInternships = async (req, res, next) => {
   try {
     const id = req.params.id;
