@@ -32,7 +32,7 @@ export const register = async (req, res) => {
     });
 
 
-    res.status(HTTP_CODES.SUCCESS).json({name: company.name, email: company.email, role: company.role });
+    res.status(HTTP_CODES.SUCCESS).json({ name: company.name, email: company.email, role: company.role });
 
   } catch (err) {
     next(err);
