@@ -9,22 +9,46 @@ import {
   addToFavoritesInternship,
   getFavoritesInternships,
   getInternForCompany,
-  removeFromFavoritesInternship
+  removeFromFavoritesInternship,
 } from "../controllers/internController.js";
-import {checkAuth, checkInternAuth, verifyToken} from "../middlewares/checkAuth.js";
+import {
+  checkAuth,
+  checkInternAuth,
+  verifyToken,
+} from "../middlewares/checkAuth.js";
 
-// public  
+// public
 router.post("/", register);
 
 // authorized
-router.get("/:id/one",   checkAuth, verifyToken,  getIntern);
+router.get("/:id/one", checkAuth, verifyToken, getIntern);
 
 // intern only
-router.put("/:id/resume",   checkInternAuth, verifyToken, createResume);
-router.patch("/:id/update-intern",   checkInternAuth, verifyToken, updateIntern);
-router.get("/:id/favorites", checkInternAuth, verifyToken, getFavoritesInternships);
-router.get("/:id/apply-to-internship", checkInternAuth, verifyToken,  getInternForCompany);
-router.patch("/:id/add-to-favorites", checkInternAuth, verifyToken, addToFavoritesInternship);
-router.patch("/:id/remove-from-favorites", checkInternAuth, verifyToken,  removeFromFavoritesInternship);
+router.put("/:id/resume", checkInternAuth, verifyToken, createResume);
+router.patch("/:id/update-intern", checkInternAuth, verifyToken, updateIntern);
+router.get(
+  "/:id/favorites",
+  checkInternAuth,
+  verifyToken,
+  getFavoritesInternships,
+);
+router.get(
+  "/:id/apply-to-internship",
+  checkInternAuth,
+  verifyToken,
+  getInternForCompany,
+);
+router.patch(
+  "/:id/add-to-favorites",
+  checkInternAuth,
+  verifyToken,
+  addToFavoritesInternship,
+);
+router.patch(
+  "/:id/remove-from-favorites",
+  checkInternAuth,
+  verifyToken,
+  removeFromFavoritesInternship,
+);
 
 export default router;

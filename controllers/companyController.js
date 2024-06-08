@@ -5,7 +5,6 @@ import { ERRORS, HTTP_CODES } from "../constants/errors.js";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-
 export const register = async (req, res) => {
   try {
     const { name, email, password, conditions } = req.body;
@@ -13,15 +12,21 @@ export const register = async (req, res) => {
     const hash = bcrypt.hashSync(password, salt);
 
     if (!name || !email || password.length < 8) {
-      return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE});
+      return res
+        .status(ERRORS.BAD_REQUEST.CODE)
+        .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
     if (conditions !== true) {
-      return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE});
+      return res
+        .status(ERRORS.BAD_REQUEST.CODE)
+        .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
-  
+
     const isEmail = await Company.findOne({ email });
     if (isEmail) {
-      return res.status(ERRORS.BAD_REQUEST.CODE).json({ message: ERRORS.BAD_REQUEST.TITLE });
+      return res
+        .status(ERRORS.BAD_REQUEST.CODE)
+        .json({ message: ERRORS.BAD_REQUEST.TITLE });
     }
 
     const company = await Company.create({
@@ -31,9 +36,9 @@ export const register = async (req, res) => {
       role: "company",
     });
 
-
-    res.status(HTTP_CODES.SUCCESS).json({ name: company.name, email: company.email, role: company.role });
-
+    res
+      .status(HTTP_CODES.SUCCESS)
+      .json({ name: company.name, email: company.email, role: company.role });
   } catch (err) {
     next(err);
   }
@@ -47,10 +52,16 @@ export const getCompany = async (req, res, next) => {
 
     const company = await Company.findById(req.params.id);
     if (!company) {
-      return res.status(ERRORS.COMPANY_NOT_FOUND.CODE).json({ message: ERRORS.COMPANY_NOT_FOUND.TITLE });
+      return res
+        .status(ERRORS.COMPANY_NOT_FOUND.CODE)
+        .json({ message: ERRORS.COMPANY_NOT_FOUND.TITLE });
     }
 
-    res.status(HTTP_CODES.SUCCESS).json({ name: company.name, description: company.description, id: company._id });
+    res.status(HTTP_CODES.SUCCESS).json({
+      name: company.name,
+      description: company.description,
+      id: company._id,
+    });
   } catch (err) {
     next(err);
   }
@@ -58,11 +69,11 @@ export const getCompany = async (req, res, next) => {
 
 export const updateCompany = async (req, res, next) => {
   try {
-  const { name, description } = req.body;
-  const updateFields = {};
+    const { name, description } = req.body;
+    const updateFields = {};
 
-  if (name) updateFields.name = name;
-  if (description) updateFields.description = description;
+    if (name) updateFields.name = name;
+    if (description) updateFields.description = description;
 
     const updateCompany = await Company.findByIdAndUpdate(
       req.params.id,
@@ -70,7 +81,10 @@ export const updateCompany = async (req, res, next) => {
       { new: true },
     );
 
-    res.status(HTTP_CODES.SUCCESS).json({ name: updateCompany.name, description: updateCompany.description });
+    res.status(HTTP_CODES.SUCCESS).json({
+      name: updateCompany.name,
+      description: updateCompany.description,
+    });
   } catch (err) {
     next(err);
   }
@@ -86,7 +100,9 @@ export const getUsersForInternship = async (req, res, next) => {
     });
 
     if (!internship) {
-      return res.status(ERRORS.INTERNSHIP_NOT_FOUND.CODE).json({ message: ERRORS.INTERNSHIP_NOT_FOUND.TITLE });
+      return res
+        .status(ERRORS.INTERNSHIP_NOT_FOUND.CODE)
+        .json({ message: ERRORS.INTERNSHIP_NOT_FOUND.TITLE });
     }
 
     res.status(HTTP_CODES.SUCCESS).json(internship.participants);

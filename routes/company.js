@@ -11,7 +11,7 @@ const router = express.Router();
 
 // public
 router.post("/", register);
-router.get("/:id/one",   getCompany);
+router.get("/:id/one", getCompany);
 
 // company only
 router.patch("/:id", checkCompanyAuth, verifyToken, updateCompany);

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Internship from "../models/internshipModel.js";
-import {  HTTP_CODES, ERRORS } from "../constants/errors.js";
+import { HTTP_CODES, ERRORS } from "../constants/errors.js";
 import { internships } from "../internships.js";
 
 export const createIntership = async (req, res) => {
@@ -19,7 +19,14 @@ export const createIntership = async (req, res) => {
     const companyId = req.params.id;
     const companyObjectId = new mongoose.Types.ObjectId(companyId);
 
-    if (!title || !company || !durationOfInternship || salary < 0 || !conditions || !skills) {
+    if (
+      !title ||
+      !company ||
+      !durationOfInternship ||
+      salary < 0 ||
+      !conditions ||
+      !skills
+    ) {
       return res.status(ERRORS.BAD_REQUEST.CODE).json(ERRORS.BAD_REQUEST.TITLE);
     }
 
@@ -37,8 +44,7 @@ export const createIntership = async (req, res) => {
       companyId: companyObjectId,
     });
 
-
-     res.status(HTTP_CODES.SUCCESS).json(newInternship);
+    res.status(HTTP_CODES.SUCCESS).json(newInternship);
   } catch (err) {
     next(err);
   }
@@ -97,24 +103,21 @@ export const getFilteredInternships = async (req, res, next) => {
   }
 };
 
+export const getNewPopularInternships = async (req, res, next) => {
+  try {
+    const limit = 6;
 
-export const getNewPopularInternships = async (req, res, next) => { 
-  try { 
-    const limit = 6; 
+    const internships = await Internship.find({
+      salary: { $ne: null },
+      typeOfEmployment: "Partial",
+      isActive: true,
+    }).limit(limit);
 
-    const internships = await Internship.find(
-      {
-        salary: { $ne: null }, 
-        typeOfEmployment: "Partial", 
-        isActive: true
-      },
-    ).limit(limit);
-    
-    res.status(HTTP_CODES.SUCCESS).json(internships); 
+    res.status(HTTP_CODES.SUCCESS).json(internships);
   } catch (err) {
-    next(err); 
-  } 
-}; 
+    next(err);
+  }
+};
 
 export const getInternshipsForCompany = async (req, res, next) => {
   try {
@@ -137,7 +140,7 @@ export const getInternshipsForIntern = async (req, res, next) => {
       participants: req.params.id,
       isActive: true,
     });
-    
+
     res.status(HTTP_CODES.SUCCESS).json(internshipsForIntern);
   } catch (err) {
     next(err);
@@ -169,7 +172,6 @@ export const applyForInternship = async (req, res, next) => {
       participants: userObjectId,
     });
 
-
     if (existingInternship) {
       return res
         .status(ERRORS.BAD_REQUEST.CODE)
@@ -199,7 +201,6 @@ export const participantsOfInternship = async (req, res, next) => {
     next(err);
   }
 };
-
 
 // Заполнение коллекции internships стажировками из файла internship.js
 // const insertInternships = async () => {

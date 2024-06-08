@@ -22,9 +22,9 @@ const companySchema = new mongoose.Schema(
     },
     description: String,
     accessToken: {
-      type:String,
+      type: String,
       default: null,
-    }
+    },
   },
   {
     versionKey: false,
