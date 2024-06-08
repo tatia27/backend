@@ -13,11 +13,11 @@ const authHeader = {
 
 // REQUESTS COMPANY
 const correctCompanyId = "66522f3f7040b2cc0de7dde1"
-const uncorrectCompanyId = "nettakoikompanii"
+const uncorrectCompanyId = "36473438384d657h23455"
 
 // REQUESTS INTERNSHIP
 const correctInternId = "665227f9f12a3eaa868cde75"
-const uncorrectInternId = "nettakovausera"
+const uncorrectInternId = "665555ftdrtccc0fde111e"
 
 describe("Requets Company", () => {
     // TRUE
